@@ -362,7 +362,7 @@
 
 <script src="tet_p1_jan8_s2.js"></script>
 <script>
-  const RAW_QS = window.tetQuestions || window.questions || [];
+  const RAW_QS = Array.isArray(window.tetQuestions) ? window.tetQuestions : [];
   const NORMALIZED_QS = RAW_QS.map((item, i) => ({
     id: item.id || (i + 1),
     section: item.section || "TG TET",
@@ -401,7 +401,10 @@
 
   function switchRole(role) {
     ['student', 'director', 'admin'].forEach(r => {
-      document.getElementById(`view-${r}`).style.display = (r === role) ? 'block' : 'none'; document.getElementById(`tab-${r}`).classList.toggle('active', r === role);
+      const viewEl = document.getElementById('view-' + r);
+      const tabEl = document.getElementById('tab-' + r);
+      if (viewEl) viewEl.style.display = (r === role) ? 'block' : 'none';
+      if (tabEl) tabEl.classList.toggle('active', r === role);
     });
   }
 
@@ -443,7 +446,7 @@
           paperTag: PAPER_TAG
         });
         if (!res.ok) return alert("❌ " + translateServerMsg(res.error));
-        alert(`🎉 Payment Successful!\n\nYour Personal PIN for TG TET: ${res.student.personal_pin}\nSave this PIN to resume or view your scorecard anytime.`);
+        alert("🎉 Payment Successful!\n\nYour Personal PIN for TG TET: " + res.student.personal_pin + "\nSave this PIN to resume or view your scorecard anytime.");
         localStorage.setItem(SESSION_COOKIE_KEY, JSON.stringify({ isDirect: true, name, phone, pin: res.student.personal_pin, paperTag: PAPER_TAG }));
         bootStudentFromCloud(res, true);
       }
@@ -513,8 +516,8 @@
         <td><strong>${inst.name}</strong><br><small>Code: <code>${inst.code}</code></small></td>
         <td>${inst.director_mobile}<br><small>PIN: <code>${inst.director_pin}</code></small></td>
         <td>${inst.roll_start}–${inst.roll_end}</td>
-        <td>${inst.discount}\% OFF<br><strong>₹${payable}</strong></td>
-        <td><span class="status-pill ${inst.fee_paid \vert{}\vert{} payable===0 ? 'st-active' : 'st-hold'}">${payable===0 ? 'FREE' : (inst.fee_paid ? 'PAID' : 'UNPAID')}</span></td>
+        <td>${inst.discount}% OFF<br><strong>₹${payable}</strong></td>
+        <td><span class="status-pill ${inst.fee_paid || payable === 0 ? 'st-active' : 'st-hold'}">${payable === 0 ? 'FREE' : (inst.fee_paid ? 'PAID' : 'UNPAID')}</span></td>
         <td><span class="status-pill ${inst.admin_allowed ? 'st-active' : 'st-hold'}">${inst.admin_allowed ? 'ACTIVE' : 'HOLD'}</span></td>
         <td style="display:flex; gap:5px; flex-wrap:wrap;">
           <button class="btn btn-sm ${inst.admin_allowed ? 'btn-warn' : 'btn-success'}" onclick="toggleAdminInst('${inst.id}', ${!inst.admin_allowed})">${inst.admin_allowed ? '⛔ Hold' : '✅ Allow'}</button>
@@ -554,10 +557,13 @@
     dirInstData = res.inst;
     dirBasePrice = res.basePrice;
     const payable = Math.round(dirBasePrice * (100 - dirInstData.discount) / 100);
-    document.getElementById('dirInstTitle').innerText = `🏛️ ${dirInstData.name}`; document.getElementById('meritPrintInstName').innerText = dirInstData.name; document.getElementById('dirInstMeta').innerText = `Code: ${dirInstData.code} • Rolls: ${dirInstData.roll_start}–${dirInstData.roll_end}`;
+    document.getElementById('dirInstTitle').innerText = "🏛️ " + dirInstData.name;
+    document.getElementById('meritPrintInstName').innerText = dirInstData.name;
+    document.getElementById('dirInstMeta').innerText = "Code: " + dirInstData.code + " • Rolls: " + dirInstData.roll_start + "–" + dirInstData.roll_end;
     const badge = document.getElementById('dirExamStatusBadge');
     badge.innerText = dirInstData.exam_live ? "LIVE" : "STOPPED";
-    badge.className = `status-pill ${dirInstData.exam_live ? 'st-active' : 'st-hold'}`; document.getElementById('dirFeeInfo').innerText = payable === 0 ? "🎉 100\% Discount — Free Exam Activation Available!" : `Fee: ₹${dirBasePrice} | Discount: ${dirInstData.discount}\% \vert{} Payable: ₹${payable}`;
+    badge.className = "status-pill " + (dirInstData.exam_live ? 'st-active' : 'st-hold');
+    document.getElementById('dirFeeInfo').innerText = payable === 0 ? "🎉 100% Discount — Free Exam Activation Available!" : ("Fee: ₹" + dirBasePrice + " | Discount: " + dirInstData.discount + "% | Payable: ₹" + payable);
 
     const act = document.getElementById('dirActionButtons');
     if (dirInstData.exam_live) {
@@ -569,12 +575,12 @@
     }
 
     const tetStudents = res.students.filter(s => String(s.roll).endsWith(PAPER_TAG));
-    document.getElementById('dirLobbyMonitorBadge').innerText = `👥 Checked-In Students: ${tetStudents.length}`;
+    document.getElementById('dirLobbyMonitorBadge').innerText = "👥 Checked-In Students: " + tetStudents.length;
     document.getElementById('directorStudentsBody').innerHTML = tetStudents.length === 0
       ? `<tr><td colspan="7" style="text-align:center;">No students have checked in for TG TET Paper-I yet.</td></tr>`
       : tetStudents.map((s, idx) => `<tr>
           <td><strong>#${idx+1}</strong></td><td><strong>${s.roll.replace(PAPER_TAG, '')}</strong></td><td>${s.name}</td>
-          <td><strong>${s.total} /${NORMALIZED_QS.length}</strong></td>
+          <td><strong>${s.total} / ${NORMALIZED_QS.length}</strong></td>
           <td class="no-print"><code>${s.personal_pin}</code></td>
           <td class="no-print"><span class="status-pill ${s.status==='SUBMITTED' ? 'st-active' : 'st-hold'}">${s.status}</span></td>
           <td class="no-print" style="display:flex; gap:5px;">
@@ -590,19 +596,19 @@
   function payDirectorRazorpay(payable) {
     const rzp = new Razorpay({
       key: RAZORPAY_KEY_ID, amount: payable * 100, currency: "INR",
-      name: "Apex Exams Portal", description: `TG TET Paper-I Fee (${dirInstData.name})`,
+      name: "Apex Exams Portal", description: "TG TET Paper-I Fee (" + dirInstData.name + ")",
       handler: (resp) => setExamLive(true, true, resp.razorpay_payment_id)
     });
     rzp.open();
   }
   async function dirReExam(rollFull) {
-    if (!confirm(`Allow Re-Exam for Roll ${rollFull.replace(PAPER_TAG, '')}?`)) return;
+    if (!confirm("Allow Re-Exam for Roll " + rollFull.replace(PAPER_TAG, '') + "?")) return;
     await apiCall({ action: "director_reexam", instId: dirInstData.id, roll: rollFull });
     refreshDirectorData();
   }
   async function dirResetPin(rollFull) {
     const res = await apiCall({ action: "director_reset_pin", instId: dirInstData.id, roll: rollFull });
-    if (res.ok) { refreshDirectorData(); alert(`🔑 New PIN for Roll ${rollFull.replace(PAPER_TAG, '')}:${res.newPin}`); }
+    if (res.ok) { refreshDirectorData(); alert("🔑 New PIN for Roll " + rollFull.replace(PAPER_TAG, '') + ": " + res.newPin); }
   }
 
   // ================= STUDENT & EXAM ENGINE =================
@@ -624,7 +630,7 @@
     document.getElementById('stuLoginBtn').innerText = "🚀 Join Lobby / Resume TG TET Paper-I";
 
     if (!res.ok) return alert("❌ " + translateServerMsg(res.error));
-    if (res.isNew) alert(`🎉 Welcome ${name}!\n\nYour Personal PIN for TG TET:${res.student.personal_pin}\nPlease note down this PIN.`);
+    if (res.isNew) alert("🎉 Welcome " + name + "!\n\nYour Personal PIN for TG TET: " + res.student.personal_pin + "\nPlease note down this PIN.");
 
     localStorage.setItem(SESSION_COOKIE_KEY, JSON.stringify({ isDirect: false, code, roll: taggedRoll, name, phone, pin: res.student.personal_pin }));
     bootStudentFromCloud(res, false);
@@ -649,7 +655,7 @@
     }
 
     const serverStartMs = Number(res.liveStartedMs || res.live_started_ms || 0);
-    const localLobbyKey = `LOBBY_END_${stu.id}`;
+    const localLobbyKey = "LOBBY_END_" + stu.id;
     let lobbyEndMs = 0;
 
     if (serverStartMs > 0) {
@@ -673,8 +679,31 @@
   function startWaitingLobby(lobbyEndMs) {
     document.getElementById('waitingLobbyScreen').style.display = 'block';
     document.getElementById('lobbyInstTitle').innerText = stuSession.instName;
-    document.getElementById('lobbyCandidateInfo').innerText = `Roll No: ${stuSession.roll} •${stuSession.name}`;
-    document.getElementById('lobbyPinDisplay').innerText = `🔑 Personal PIN: ${stuSession.pin}`;  clearInterval(lobbyInterval); function tickLobby() { const rem = Math.ceil((lobbyEndMs - Date.now()) / 1000); if (rem <= 0) { clearInterval(lobbyInterval); document.getElementById('waitingLobbyScreen').style.display = 'none'; examEndTimeMs = Date.now() + (EXAM_DURATION_MINS * 60 * 1000); launchActualExamScreen(); return; } const m = String(Math.floor(rem / 60)).padStart(2, '0'); const s = String(rem \% 60).padStart(2, '0'); document.getElementById('lobbyCountdownDisplay').innerText = `${m}:${s}`; } tickLobby(); lobbyInterval = setInterval(tickLobby, 1000); }  function launchActualExamScreen() { document.getElementById('waitingLobbyScreen').style.display = 'none'; document.getElementById('examScreen').style.display = 'block'; document.getElementById('stuPinBanner').innerText = `🔑 PIN: ${stuSession.pin}`;
+    document.getElementById('lobbyCandidateInfo').innerText = "Roll No: " + stuSession.roll + " • " + stuSession.name;
+    document.getElementById('lobbyPinDisplay').innerText = "🔑 Personal PIN: " + stuSession.pin;
+
+    clearInterval(lobbyInterval);
+    function tickLobby() {
+      const rem = Math.ceil((lobbyEndMs - Date.now()) / 1000);
+      if (rem <= 0) {
+        clearInterval(lobbyInterval);
+        document.getElementById('waitingLobbyScreen').style.display = 'none';
+        examEndTimeMs = Date.now() + (EXAM_DURATION_MINS * 60 * 1000);
+        launchActualExamScreen();
+        return;
+      }
+      const m = String(Math.floor(rem / 60)).padStart(2, '0');
+      const s = String(rem % 60).padStart(2, '0');
+      document.getElementById('lobbyCountdownDisplay').innerText = m + ":" + s;
+    }
+    tickLobby();
+    lobbyInterval = setInterval(tickLobby, 1000);
+  }
+
+  function launchActualExamScreen() {
+    document.getElementById('waitingLobbyScreen').style.display = 'none';
+    document.getElementById('examScreen').style.display = 'block';
+    document.getElementById('stuPinBanner').innerText = "🔑 PIN: " + stuSession.pin;
     buildPalette();
     renderQuestion(currentIdx);
     startTimer();
@@ -688,7 +717,29 @@
       const h = String(Math.floor(rem / 3600)).padStart(2, '0');
       const m = String(Math.floor((rem % 3600) / 60)).padStart(2, '0');
       const s = String(rem % 60).padStart(2, '0');
-      document.getElementById('timerDisplay').innerText = `⏱️ ${h}:${m}:${s}`; } tick(); timerInterval = setInterval(tick, 1000); }  function renderQuestion(idx) { if (idx >= NORMALIZED_QS.length) idx = 0; currentIdx = idx; const q = NORMALIZED_QS[idx]; const sel = answersMap[String(idx)]; document.getElementById('qNumberLabel').innerText = `Question ${idx + 1} of ${NORMALIZED_QS.length}`; document.getElementById('qSectionLabel').innerText = q.section;  const pBox = document.getElementById('passageBox'); if (q.passage) { pBox.style.display = 'block'; pBox.innerText = q.passage; } else { pBox.style.display = 'none'; }  document.getElementById('qText').innerText = `${idx + 1}. ${q.text}`;  const blockIdx = Math.floor(idx / 30); for (let i = 0; i < 5; i++) { document.getElementById(`secBtn${i}`).classList.toggle('active', i === blockIdx);
+      document.getElementById('timerDisplay').innerText = "⏱️ " + h + ":" + m + ":" + s;
+    }
+    tick();
+    timerInterval = setInterval(tick, 1000);
+  }
+
+  function renderQuestion(idx) {
+    if (idx >= NORMALIZED_QS.length) idx = 0;
+    currentIdx = idx;
+    const q = NORMALIZED_QS[idx];
+    const sel = answersMap[String(idx)];
+    document.getElementById('qNumberLabel').innerText = "Question " + (idx + 1) + " of " + NORMALIZED_QS.length;
+    document.getElementById('qSectionLabel').innerText = q.section;
+
+    const pBox = document.getElementById('passageBox');
+    if (q.passage) { pBox.style.display = 'block'; pBox.innerText = q.passage; }
+    else { pBox.style.display = 'none'; }
+
+    document.getElementById('qText').innerText = (idx + 1) + ". " + q.text;
+
+    const blockIdx = Math.floor(idx / 30);
+    for (let i = 0; i < 5; i++) {
+      document.getElementById('secBtn' + i).classList.toggle('active', i === blockIdx);
     }
 
     document.getElementById('optionsBox').innerHTML = q.options.map((opt, i) => `
@@ -702,7 +753,7 @@
     if (!stuSession) return;
     document.getElementById('saveIndicator').innerText = "⏳ Saving...";
     await apiCall({ action: "student_save", studentId: stuSession.id, answersMap, lastIdx: currentIdx });
-    document.getElementById('saveIndicator').innerText = `☁️ Saved (${Object.keys(answersMap).length})`;
+    document.getElementById('saveIndicator').innerText = "☁️ Saved (" + Object.keys(answersMap).length + ")";
   }
 
   function selectOption(i) { answersMap[String(currentIdx)] = i; renderQuestion(currentIdx); syncCloudNow(); }
@@ -713,17 +764,22 @@
 
   function buildPalette() {
     document.getElementById('paletteGrid').innerHTML = NORMALIZED_QS.map((_, idx) =>
-      `<button class="p-btn" id="pbtn-${idx}" onclick="renderQuestion(${idx})">${idx + 1}</button>`).join(''); } function updatePalette() { let ansCount = 0; NORMALIZED_QS.forEach((_, idx) => { const b = document.getElementById(`pbtn-${idx}`);
+      `<button class="p-btn" id="pbtn-${idx}" onclick="renderQuestion(${idx})">${idx + 1}</button>`).join('');
+  }
+  function updatePalette() {
+    let ansCount = 0;
+    NORMALIZED_QS.forEach((_, idx) => {
+      const b = document.getElementById('pbtn-' + idx);
       if (!b) return;
       b.className = 'p-btn';
       if (answersMap[String(idx)] !== undefined) { b.classList.add('answered'); ansCount++; }
       if (idx === currentIdx) b.classList.add('current');
     });
-    document.getElementById('answeredCountLabel').innerText = `Answered: ${ansCount} /${NORMALIZED_QS.length}`;
+    document.getElementById('answeredCountLabel').innerText = "Answered: " + ansCount + " / " + NORMALIZED_QS.length;
   }
 
   function confirmSubmit() {
-    if (confirm(`You have answered ${Object.keys(answersMap).length} out of${NORMALIZED_QS.length} questions. Submit exam now?`)) submitExam(false);
+    if (confirm("You have answered " + Object.keys(answersMap).length + " out of " + NORMALIZED_QS.length + " questions. Submit exam now?")) submitExam(false);
   }
 
   async function submitExam(alreadySubmitted) {
@@ -749,7 +805,7 @@
       return `<div class="rev-item ${cls}">
         <div style="display:flex; justify-content:space-between; font-size:0.82rem;"><strong>Q.${idx + 1} [${q.section}]</strong>${badge}</div>
         <div style="font-size:0.88rem; margin:5px 0;">${q.text}</div>
-        <div style="font-size:0.82rem;">Your Answer: <strong>${uAns !== undefined ? '('+(uAns+1)+') '+q.options[uAns] : 'Not Answered'}</strong> | Correct Answer: <strong style="color:#16a34a;">(${q.ans+1})${q.options[q.ans]}</strong></div>
+        <div style="font-size:0.82rem;">Your Answer: <strong>${uAns !== undefined ? '('+(uAns+1)+') '+q.options[uAns] : 'Not Answered'}</strong> | Correct Answer: <strong style="color:#16a34a;">(${q.ans+1}) ${q.options[q.ans]}</strong></div>
       </div>`;
     }).join('');
 
@@ -758,7 +814,8 @@
     }
 
     document.getElementById('printInstName').innerText = stuSession.instName;
-    document.getElementById('finalScoreText').innerHTML = `${correct} <span>/ ${NORMALIZED_QS.length}</span>`; document.getElementById('candidateMetaText').innerHTML = `<span>🆔 Roll: <strong>${stuSession.roll}</strong></span><span>•</span><span>👤 ${stuSession.name}</span><span>•</span><span>🔑 PIN: <strong>${stuSession.pin}</strong></span>`;
+    document.getElementById('finalScoreText').innerHTML = correct + " <span>/ " + NORMALIZED_QS.length + "</span>";
+    document.getElementById('candidateMetaText').innerHTML = "<span>🆔 Roll: <strong>" + stuSession.roll + "</strong></span><span>•</span><span>👤 " + stuSession.name + "</span><span>•</span><span>🔑 PIN: <strong>" + stuSession.pin + "</strong></span>";
     document.getElementById('statCorrect').innerText = correct;
     document.getElementById('statWrong').innerText = wrong;
     document.getElementById('statSkip').innerText = skipped;
