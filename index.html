@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TG TET Paper-I (Telugu) — 8th Jan 2025 Shift-2 | Apex Exams Portal</title>
+  <title>TG TET Paper-I (Telugu) Free State-Wide Grand Test | Apex Exams Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+Telugu:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
       --primary: #7c3aed; --primary-dark: #5b21b6; --accent: #16a34a;
-      --danger: #dc2626; --warn: #d97706; --bg: #f1f5f9; --card: #ffffff;
-      --text: #0f172a; --muted: #64748b; --border: #e2e8f0;
+      --danger: #dc2626; --warn: #d97706; --wa: #25D366; --wa-dark: #128C7E;
+      --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --muted: #64748b; --border: #e2e8f0;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Telugu', sans-serif; }
     body { background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 60px; }
@@ -30,15 +30,16 @@
     .sub-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
     .sub-btn { padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 9px; font-weight: 800; font-size: 0.85rem; cursor: pointer; background: #f8fafc; color: #334155; }
     .sub-btn.active { background: #ede9fe; border-color: #7c3aed; color: #5b21b6; }
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 14px; }
     .form-group label { display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 4px; color: #334155; }
     .form-group input { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 9px; font-size: 0.94rem; outline: none; }
-    .btn { display: inline-block; padding: 11px 16px; border: none; border-radius: 9px; font-size: 0.92rem; font-weight: 800; cursor: pointer; text-align: center; }
+    .btn { display: inline-block; padding: 11px 16px; border: none; border-radius: 9px; font-size: 0.92rem; font-weight: 800; cursor: pointer; text-align: center; text-decoration: none; }
     .btn-full { width: 100%; }
     .btn-primary { background: var(--primary); color: white; }
     .btn-success { background: var(--accent); color: white; }
     .btn-danger { background: var(--danger); color: white; }
     .btn-warn { background: var(--warn); color: white; }
+    .btn-wa { background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.28); }
     .btn-outline { background: #f8fafc; color: #334155; border: 1.5px solid #cbd5e1; }
     .btn-sm { padding: 6px 10px; font-size: 0.78rem; border-radius: 6px; }
     .table-wrap { overflow-x: auto; margin-top: 12px; }
@@ -48,6 +49,31 @@
     .status-pill { padding: 3px 9px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; }
     .st-active { background: #dcfce7; color: #166534; }
     .st-hold { background: #fee2e2; color: #991b1b; }
+    .st-wait { background: #fef3c7; color: #92400e; }
+
+    /* HALL TICKET CARD */
+    .ht-box { background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); border: 2px solid #7c3aed; border-radius: 16px; overflow: hidden; max-width: 560px; margin: 0 auto 16px; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.12); }
+    .ht-header { background: linear-gradient(135deg, #0f172a 0%, #4c1d95 100%); color: white; padding: 14px 18px; text-align: center; border-bottom: 3px solid #a78bfa; }
+    .ht-header h3 { font-size: 1.05rem; font-weight: 800; color: #e9d5ff; }
+    .ht-header p { font-size: 0.76rem; color: #cbd5e1; }
+    .ht-body { padding: 18px; }
+    .ht-number-banner { background: #ede9fe; border: 1.5px dashed #7c3aed; border-radius: 10px; padding: 10px; text-align: center; margin-bottom: 14px; }
+    .ht-number-banner span { display: block; font-size: 0.72rem; font-weight: 800; color: #5b21b6; text-transform: uppercase; letter-spacing: 0.6px; }
+    .ht-number-banner strong { font-size: 1.55rem; font-weight: 800; color: #0f172a; letter-spacing: 2px; }
+    .ht-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; margin-bottom: 12px; }
+    .ht-cell { background: white; border: 1px solid #e2e8f0; padding: 8px 10px; border-radius: 8px; }
+    .ht-cell small { display: block; font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
+    .ht-cell strong { color: #0f172a; font-size: 0.9rem; }
+    .ht-footer { background: #f1f5f9; padding: 9px 14px; font-size: 0.75rem; color: #475569; text-align: center; border-top: 1px solid #e2e8f0; }
+
+    /* WAITING LOBBY / SCHEDULE BOX */
+    .lobby-card { text-align: center; padding: 24px 18px; border: 2px solid #c4b5fd; background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%); }
+    .lobby-timer { font-size: 2.3rem; font-weight: 800; color: #5b21b6; margin: 10px 0; letter-spacing: 1.5px; font-variant-numeric: tabular-nums; }
+    .lobby-pill { display: inline-block; background: #fef3c7; color: #92400e; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; margin-bottom: 10px; }
+    .lobby-rules { text-align: left; max-width: 560px; margin: 14px auto 0; background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; font-size: 0.82rem; color: #334155; }
+    .lobby-rules li { margin-left: 16px; margin-bottom: 4px; }
+
+    /* EXAM SCREEN */
     .exam-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; background: white; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; }
     .timer-box { background: #fee2e2; color: #b91c1c; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 0.95rem; }
     .sec-btn { padding: 6px 9px; border-radius: 8px; border: 1.5px solid #cbd5e1; background: #f8fafc; font-weight: 700; font-size: 0.76rem; cursor: pointer; }
@@ -63,25 +89,25 @@
     .p-btn.answered { background: #16a34a; color: white; border-color: #16a34a; }
     .p-btn.current { outline: 2.5px solid #7c3aed; }
 
-    /* WAITING LOBBY BOX */
-    .lobby-card { text-align: center; padding: 32px 20px; border: 2px solid #c4b5fd; background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%); }
-    .lobby-timer { font-size: 3.1rem; font-weight: 800; color: #5b21b6; margin: 14px 0; letter-spacing: 2px; font-variant-numeric: tabular-nums; }
-    .lobby-pill { display: inline-block; background: #fef3c7; color: #92400e; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; margin-bottom: 10px; }
-    .lobby-rules { text-align: left; max-width: 520px; margin: 16px auto 0; background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; font-size: 0.82rem; color: #334155; }
-    .lobby-rules li { margin-left: 16px; margin-bottom: 4px; }
-
     /* SCORECARD */
     .scorecard-wrap { background: #ffffff; border-radius: 16px; border: 1px solid #cbd5e1; overflow: hidden; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); margin-bottom: 18px; }
     .score-banner { background: linear-gradient(135deg, #0f172a 0%, #4c1d95 55%, #7c3aed 100%); color: white; padding: 26px 20px; text-align: center; }
     .score-badge { display: inline-block; background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.28); padding: 4px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
     .score-main { font-size: 2.7rem; font-weight: 800; line-height: 1.15; margin: 4px 0 12px; }
     .score-main span { font-size: 1.35rem; font-weight: 600; color: #ddd6fe; }
+    .rank-pill { display: inline-block; background: #fef08a; color: #854d0e; font-weight: 800; padding: 5px 16px; border-radius: 20px; font-size: 0.92rem; margin-bottom: 10px; }
     .candidate-strip { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 8px; background: rgba(15, 23, 42, 0.45); border: 1px solid rgba(255, 255, 255, 0.15); padding: 7px 14px; border-radius: 10px; font-size: 0.84rem; font-weight: 600; color: #f1f5f9; }
     .stats-strip { display: grid; grid-template-columns: repeat(3, 1fr); background: #f8fafc; border-top: 1px solid #e2e8f0; }
     .stat-cell { padding: 14px 10px; text-align: center; border-right: 1px solid #e2e8f0; }
     .stat-cell:last-child { border-right: none; }
     .stat-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 4px; }
     .stat-val { font-size: 1.25rem; font-weight: 800; color: #0f172a; }
+
+    /* DIRECTOR KPI BAR */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 14px 0; }
+    .kpi-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+    .kpi-card small { display: block; font-size: 0.74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .kpi-card strong { font-size: 1.4rem; font-weight: 800; color: var(--primary-dark); }
 
     .rev-item { border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 10px; background: white; }
     .rev-correct { border-left: 5px solid #16a34a; }
@@ -100,73 +126,120 @@
 <body>
 
 <header>
-  <h1>🎓 TG TET Paper-I (Telugu) — 8th Jan 2025 Shift-2</h1>
-  <p>150 Qs • 150 Marks • 150 Mins</p>
+  <h1>🎓 TG TET Paper-I (Telugu) — Free State-Wide Grand Test</h1>
+  <p>150 Qs • 150 Marks • 150 Mins • Official Shift-2 Pattern</p>
 </header>
 
 <div class="container">
   <div class="role-tabs no-print" id="roleSwitcher">
-    <button class="role-btn active" id="tab-student" onclick="switchRole('student')">🎓 Student Login</button>
-    <button class="role-btn" id="tab-director" onclick="switchRole('director')">🏛️ Director Login</button>
+    <button class="role-btn active" id="tab-student" onclick="switchRole('student')">🎓 Student Portal</button>
+    <button class="role-btn" id="tab-director" onclick="switchRole('director')">🏛️ Director Panel</button>
     <button class="role-btn" id="tab-admin" onclick="switchRole('admin')">🛡️ Super Admin</button>
   </div>
 
   <!-- 1. STUDENT VIEW -->
   <div id="view-student">
     <div id="studentLoginCard" class="card">
+      <!-- WHATSAPP CHANNEL BANNER -->
+      <div style="background:#ecfdf5; border:1.5px solid #6ee7b7; border-radius:12px; padding:12px 14px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <strong style="color:#065f46; font-size:0.92rem;">📢 Free State-Level TG TET Mock Test & Rank List!</strong>
+          <p style="font-size:0.8rem; color:#047857;">Join our official WhatsApp Channel for Exam Date/Time updates, Answer Key & State Rank PDF.</p>
+        </div>
+        <a href="https://whatsapp.com/channel/0029ValDnLhGpLHNcGojhM1v" target="_blank" rel="noopener" class="btn btn-wa btn-sm">📲 Join WhatsApp Channel</a>
+      </div>
+
       <div class="sub-tabs">
-        <button class="sub-btn active" id="modeInstBtn" onclick="switchStuMode('inst')">🏛️ Institute Student</button>
-        <button class="sub-btn" id="modeDirectBtn" onclick="switchStuMode('direct')">⚡ Direct Student (₹5 Only)</button>
+        <button class="sub-btn active" id="modeNewBtn" onclick="switchStuMode('new')">🆕 New Free Registration</button>
+        <button class="sub-btn" id="modeLoginBtn" onclick="switchStuMode('login')">🎫 Login with Hall Ticket</button>
       </div>
 
-      <!-- MODE A: INSTITUTE STUDENT -->
-      <div id="instStudentBox">
-        <h2 style="font-size: 1.15rem; margin-bottom: 6px;">🏛️ Institute Student Login — TG TET Paper-I</h2>
+      <!-- MODE A: NEW FREE REGISTRATION -->
+      <div id="newRegBox">
+        <h2 style="font-size: 1.12rem; margin-bottom: 6px; color:#5b21b6;">🆕 Free Exam Registration — Generate Hall Ticket</h2>
         <p style="font-size: 0.84rem; color: var(--muted); margin-bottom: 14px;">
-          Log in using the <strong>Institute Code & Roll Number</strong> provided by your coaching center.
+          Register for free to generate your official <strong>Hall Ticket Number</strong>. No payment required.
         </p>
         <div class="form-grid">
-          <div class="form-group"><label>Institute Code *</label><input type="text" id="stuInstCode" placeholder="e.g. AII400"></div>
-          <div class="form-group"><label>Roll Number *</label><input type="text" id="stuRoll" placeholder="e.g. 101"></div>
-          <div class="form-group"><label>Full Name *</label><input type="text" id="stuName" placeholder="e.g. K. Rajesh"></div>
-          <div class="form-group"><label>Mobile Number *</label><input type="tel" id="stuPhone" maxlength="10" placeholder="10-digit mobile number"></div>
-          <div class="form-group"><label>Personal PIN (2nd Time onwards)</label><input type="text" inputmode="numeric" autocomplete="off" id="stuPersonalPin" maxlength="4" placeholder="Leave blank if 1st time"></div>
+          <div class="form-group"><label>Candidate Full Name *</label><input type="text" id="regStuName" placeholder="Enter your full name"></div>
+          <div class="form-group"><label>Mobile Number *</label><input type="tel" id="regStuPhone" maxlength="10" placeholder="10-digit mobile number"></div>
         </div>
-        <button class="btn btn-primary btn-full" id="stuLoginBtn" onclick="studentLogin()">🚀 Join Lobby / Resume TG TET Paper-I</button>
+        <button class="btn btn-primary btn-full" id="regBtn" onclick="registerFreeStudent()">🎫 Register & Generate Hall Ticket</button>
       </div>
 
-      <!-- MODE B: DIRECT STUDENT (₹5) -->
-      <div id="directStudentBox" style="display: none;">
-        <h2 style="font-size: 1.15rem; margin-bottom: 6px; color:#15803d;">⚡ Direct Student Exam — TG TET Paper-I (₹5 Only)</h2>
+      <!-- MODE B: LOGIN WITH HALL TICKET -->
+      <div id="htLoginBox" style="display: none;">
+        <h2 style="font-size: 1.12rem; margin-bottom: 6px; color:#15803d;">🎫 Candidate Login — Enter Hall Ticket Details</h2>
         <p style="font-size: 0.84rem; color: var(--muted); margin-bottom: 14px;">
-          Attempt the official 150-question TG TET Paper-I (8th Jan 2025 Shift-2) & download PDF response sheet for <strong>₹5</strong>. Already paid? Log in with your mobile number & PIN.
+          Already registered? Enter your <strong>Name, Mobile Number & Hall Ticket Number</strong> to view your Admit Card, start the exam, or check your Rank.
         </p>
         <div class="form-grid">
-          <div class="form-group"><label>Full Name *</label><input type="text" id="dirStuName" placeholder="Enter your full name"></div>
-          <div class="form-group"><label>Mobile Number *</label><input type="tel" id="dirStuPhone" maxlength="10" placeholder="10-digit mobile number"></div>
-          <div class="form-group"><label>Personal PIN (Only if already paid ₹5)</label><input type="text" inputmode="numeric" autocomplete="off" id="dirStuPin" maxlength="4" placeholder="Leave blank for new payment"></div>
+          <div class="form-group"><label>Candidate Full Name *</label><input type="text" id="logStuName" placeholder="Enter registered name"></div>
+          <div class="form-group"><label>Mobile Number *</label><input type="tel" id="logStuPhone" maxlength="10" placeholder="10-digit mobile number"></div>
+          <div class="form-group"><label>Hall Ticket Number *</label><input type="text" autocomplete="off" id="logStuHt" placeholder="e.g. TET25-4821"></div>
         </div>
-        <button class="btn btn-success btn-full" id="directPayBtn" onclick="startDirectStudentFlow()">💳 Pay ₹5 & Start TG TET (or Continue)</button>
+        <button class="btn btn-success btn-full" id="htLoginBtn" onclick="loginWithHallTicket()">🚀 Login to Exam Portal</button>
       </div>
     </div>
 
-    <!-- 5-MINUTE PRE-EXAM WAITING LOBBY -->
+    <!-- HALL TICKET & WAITING LOBBY SCREEN -->
     <div id="waitingLobbyScreen" class="card lobby-card" style="display: none;">
-      <div class="lobby-pill">⏳ EXAM LOBBY • CANDIDATE CHECK-IN</div>
-      <h2 id="lobbyInstTitle" style="font-size:1.25rem; color:#0f172a; margin-bottom:4px;"></h2>
-      <p id="lobbyCandidateInfo" style="font-size:0.9rem; font-weight:700; color:#5b21b6; margin-bottom:10px;"></p>
-      <p style="font-size:0.86rem; color:#475569; max-width:520px; margin:0 auto;">
-        You have checked in successfully. The exam will automatically begin for all checked-in candidates when the 5-minute countdown ends.
-      </p>
-      <div class="lobby-timer" id="lobbyCountdownDisplay">05:00</div>
-      <div style="display:inline-block; background:#fef3c7; color:#92400e; padding:6px 14px; border-radius:8px; font-size:0.84rem; font-weight:800;" id="lobbyPinDisplay"></div>
+      <div class="lobby-pill" id="scheduleStatusPill">⏳ CHECKING EXAM SCHEDULE...</div>
+
+      <!-- DOWNLOADABLE / SCREENSHOT HALL TICKET CARD -->
+      <div id="hallTicketCaptureArea" class="ht-box">
+        <div class="ht-header">
+          <h3>🎓 TG TET PAPER-I (TELUGU) — ADMIT CARD</h3>
+          <p>State-Wide Free Online Grand Test • Apex Exams Portal</p>
+        </div>
+        <div class="ht-body">
+          <div class="ht-number-banner">
+            <span>Official Hall Ticket Number</span>
+            <strong id="htDisplayCode">TET25-0000</strong>
+          </div>
+          <div class="ht-grid">
+            <div class="ht-cell"><small>Candidate Name</small><strong id="htDisplayName">-</strong></div>
+            <div class="ht-cell"><small>Mobile Number</small><strong id="htDisplayPhone">-</strong></div>
+            <div class="ht-cell"><small>Exam Paper</small><strong>Paper-I (150 Marks)</strong></div>
+            <div class="ht-cell"><small>Scheduled Date & Time</small><strong id="htDisplaySchedule" style="color:#b45309;">Not Scheduled Yet</strong></div>
+          </div>
+          <div style="background:#fef3c7; color:#92400e; padding:7px 10px; border-radius:8px; font-size:0.78rem; font-weight:700;">
+            📸 Take a Screenshot or Download this Hall Ticket. You will need this Hall Ticket Number to log in on exam day.
+          </div>
+        </div>
+        <div class="ht-footer">
+          Official Updates & Rank List: <strong>whatsapp.com/channel/0029ValDnLhGpLHNcGojhM1v</strong>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:14px;">
+        <button class="btn btn-primary btn-sm" onclick="downloadHallTicketImage()">📥 Download Hall Ticket (PNG)</button>
+        <a href="https://whatsapp.com/channel/0029ValDnLhGpLHNcGojhM1v" target="_blank" rel="noopener" class="btn btn-wa btn-sm">📲 Join WhatsApp Channel for Schedule</a>
+        <button class="btn btn-outline btn-sm" onclick="refreshScheduleStatus()">🔄 Refresh Status</button>
+        <button class="btn btn-danger btn-sm" onclick="logoutStudent()">🚪 Logout</button>
+      </div>
+
+      <!-- COUNTDOWN OR NOT SCHEDULED MESSAGE -->
+      <div id="notScheduledBox" style="background:#fff1f2; border:1.5px solid #fecdd3; border-radius:12px; padding:14px; max-width:560px; margin:0 auto;">
+        <h3 style="color:#be123c; font-size:1.05rem; margin-bottom:4px;">📢 Exam Not Scheduled Yet</h3>
+        <p style="font-size:0.85rem; color:#881337;">
+          The Exam Controller has not set the exam date and time yet. Join our WhatsApp Channel to get notified as soon as the countdown starts!
+        </p>
+      </div>
+
+      <div id="scheduledCountdownBox" style="display:none; background:#ede9fe; border:1.5px solid #c4b5fd; border-radius:12px; padding:14px; max-width:560px; margin:0 auto;">
+        <div style="font-size:0.8rem; font-weight:800; color:#5b21b6; text-transform:uppercase;">⏱️ Exam Starts In</div>
+        <div class="lobby-timer" id="lobbyCountdownDisplay">00d : 00h : 00m : 00s</div>
+        <p style="font-size:0.82rem; color:#4c1d95;">The exam screen will unlock automatically when the countdown reaches zero.</p>
+      </div>
+
       <div class="lobby-rules">
-        <strong>📋 Exam Instructions:</strong>
+        <strong>📋 General Instructions for Candidates:</strong>
         <ul style="margin-top:6px;">
-          <li>Total Questions: <strong>150</strong> (CDP, Telugu, English, Maths, EVS — 30 Qs each) | Duration: <strong>150 Mins</strong>.</li>
-          <li>Each correct answer carries <strong>+1 mark</strong>. No negative marking.</li>
-          <li>Your responses are automatically saved to the cloud on every click.</li>
-          <li>Do not refresh or close the browser tab during the countdown.</li>
+          <li>Total Questions: <strong>150</strong> (Child Development & Pedagogy, Telugu, English, Mathematics, Environmental Studies — 30 Qs each).</li>
+          <li>Duration: <strong>150 Minutes (2 Hours 30 Minutes)</strong>. Each correct answer carries <strong>+1 mark</strong>; no negative marking.</li>
+          <li>Every answer you select is automatically saved to the cloud in real time.</li>
+          <li>State-wide Rank and detailed Response Sheet PDF will be generated immediately after submission.</li>
         </ul>
       </div>
     </div>
@@ -182,7 +255,7 @@
           <button class="sec-btn" id="secBtn4" onclick="jumpToBlock(120)">🌍 EVS (121-150)</button>
         </div>
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-          <span id="stuPinBanner" style="background:#fef3c7; color:#92400e; padding:5px 10px; border-radius:8px; font-size:0.82rem; font-weight:800;"></span>
+          <span id="stuHtBanner" style="background:#ede9fe; color:#5b21b6; padding:5px 10px; border-radius:8px; font-size:0.82rem; font-weight:800;"></span>
           <div class="timer-box" id="timerDisplay">⏱️ 02:30:00</div>
         </div>
       </div>
@@ -211,21 +284,22 @@
           <span id="answeredCountLabel" style="color:#16a34a; font-weight:800;">Answered: 0 / 150</span>
         </div>
         <div class="palette-grid" id="paletteGrid"></div>
-        <button class="btn btn-success btn-full" style="margin-top:14px;" onclick="confirmSubmit()">✅ Submit Exam</button>
+        <button class="btn btn-success btn-full" style="margin-top:14px;" onclick="confirmSubmit()">✅ Submit Exam & View Rank</button>
       </div>
     </div>
 
     <!-- RESULT SCREEN -->
     <div id="resultScreen" style="display: none;">
       <div class="print-header">
-        <h2 id="printInstName">Apex Exams Portal</h2>
-        <p>TG TET Paper-I (Telugu) — 8th Jan 2025 Shift-2 Scorecard & Response Sheet</p>
+        <h2>Apex Exams Portal — TG TET Paper-I (Telugu)</h2>
+        <p>Official Scorecard, State Rank & Response Sheet</p>
       </div>
 
       <div class="scorecard-wrap">
         <div class="score-banner">
-          <div class="score-badge">Official Scorecard • TG TET Paper-I (8th Jan 2025 Shift-2)</div>
+          <div class="score-badge">Official Result • TG TET Paper-I Free Grand Test</div>
           <div class="score-main" id="finalScoreText">0 <span>/ 150</span></div>
+          <div><span class="rank-pill" id="liveRankBadge">🏆 Calculating State Rank...</span></div>
           <div class="candidate-strip" id="candidateMetaText"></div>
         </div>
         <div class="stats-strip">
@@ -244,8 +318,9 @@
         </div>
       </div>
 
-      <div class="no-print" style="display:flex; gap:10px; margin-bottom:16px;">
+      <div class="no-print" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
         <button class="btn btn-primary" style="flex:1;" onclick="window.print()">🖨️ Download Scorecard & Response Sheet (PDF)</button>
+        <a href="https://whatsapp.com/channel/0029ValDnLhGpLHNcGojhM1v" target="_blank" rel="noopener" class="btn btn-wa">📲 Join WhatsApp Channel</a>
         <button class="btn btn-danger" onclick="logoutStudent()">🚪 Logout</button>
       </div>
       <div class="card">
@@ -255,13 +330,13 @@
     </div>
   </div>
 
-  <!-- 2. DIRECTOR VIEW -->
+  <!-- 2. DIRECTOR PANEL (EXAM CONTROLLER & SCHEDULE MANAGER) -->
   <div id="view-director" style="display: none;">
     <div id="directorLoginCard" class="card">
-      <h2 style="font-size:1.2rem; margin-bottom:8px;">🏛️ Institute Director Login</h2>
+      <h2 style="font-size:1.2rem; margin-bottom:8px;">🏛️ Director / Exam Controller Login</h2>
       <div class="form-grid">
-        <div class="form-group"><label>Director Mobile Number *</label><input type="tel" id="dirMobile" maxlength="10"></div>
-        <div class="form-group"><label>Director PIN *</label><input type="text" inputmode="numeric" autocomplete="off" id="dirPin"></div>
+        <div class="form-group"><label>Director Mobile Number *</label><input type="tel" id="dirMobile" maxlength="10" placeholder="8074645018"></div>
+        <div class="form-group"><label>Director PIN *</label><input type="text" inputmode="numeric" autocomplete="off" id="dirPin" placeholder="Enter PIN"></div>
       </div>
       <button class="btn btn-primary btn-full" onclick="directorLogin()">🔓 Open Director Dashboard</button>
     </div>
@@ -270,39 +345,56 @@
       <div class="card no-print">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
-            <h2 id="dirInstTitle" style="font-size:1.2rem; color:var(--primary-dark);"></h2>
+            <h2 id="dirInstTitle" style="font-size:1.2rem; color:var(--primary-dark);">TG TET Paper-I Exam Controller</h2>
             <p id="dirInstMeta" style="font-size:0.84rem; color:var(--muted);"></p>
           </div>
           <div style="display:flex; gap:8px;">
-            <button class="btn btn-primary btn-sm" onclick="refreshDirectorData()">🔄 Refresh</button>
+            <button class="btn btn-primary btn-sm" onclick="refreshDirectorData()">🔄 Refresh Live Stats</button>
             <button class="btn btn-outline btn-sm" onclick="directorLogout()">🚪 Logout</button>
           </div>
         </div>
-        <div style="background:#f8fafc; border:1px solid var(--border); padding:14px; border-radius:10px; margin-top:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <div>
-            <strong>Exam Status:</strong> <span id="dirExamStatusBadge" class="status-pill st-hold" style="margin-left:8px;">STOPPED</span>
-            <span id="dirLobbyMonitorBadge" style="margin-left:8px; font-size:0.8rem; font-weight:800; color:#5b21b6;"></span>
-            <div id="dirFeeInfo" style="font-size:0.84rem; font-weight:700; margin-top:4px;"></div>
+
+        <!-- LIVE REGISTRATION & LOGIN COUNTERS -->
+        <div class="kpi-grid">
+          <div class="kpi-card"><small>Total Registered</small><strong id="kpiTotalReg">0</strong></div>
+          <div class="kpi-card"><small>Currently Writing</small><strong id="kpiInProgress" style="color:#d97706;">0</strong></div>
+          <div class="kpi-card"><small>Submitted Exam</small><strong id="kpiSubmitted" style="color:#16a34a;">0</strong></div>
+          <div class="kpi-card"><small>Schedule Status</small><strong id="kpiSchedState" style="font-size:1rem; color:#dc2626;">NOT SET</strong></div>
+        </div>
+
+        <!-- EXAM DATE & TIME SCHEDULER -->
+        <div style="background:#f5f3ff; border:1.5px solid #c4b5fd; padding:16px; border-radius:12px; margin-top:12px;">
+          <h3 style="font-size:1rem; color:#5b21b6; margin-bottom:6px;">📅 Exam Date & Time Scheduler</h3>
+          <p style="font-size:0.82rem; color:#4c1d95; margin-bottom:12px;">
+            Set the official Exam Start Date & Time. Until you set a schedule, registered students will see <strong>"Exam Not Scheduled Yet"</strong>. Once scheduled, a live countdown starts automatically for all candidates.
+          </p>
+          <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+            <div class="form-group" style="margin-bottom:0; flex:1; min-width:210px;">
+              <label>Select Exam Start Date & Time *</label>
+              <input type="datetime-local" id="examScheduleInput">
+            </div>
+            <button class="btn btn-success" onclick="saveExamSchedule()">📅 Save & Publish Schedule</button>
+            <button class="btn btn-danger" onclick="clearExamSchedule()">⏹️ Reset to Not Scheduled</button>
           </div>
-          <div id="dirActionButtons" style="display:flex; gap:8px;"></div>
+          <div id="currentScheduleDisplay" style="margin-top:10px; font-size:0.85rem; font-weight:800; color:#1e1b4b;"></div>
         </div>
       </div>
 
       <div class="card">
         <div class="print-header">
-          <h2 id="meritPrintInstName"></h2>
-          <h3>TG TET Paper-I (Telugu) Official Merit List</h3>
+          <h2>TG TET Paper-I (Telugu) — Official State Merit List</h2>
+          <p>Apex Exams Portal • Free State-Wide Grand Test</p>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;" class="no-print">
-          <h3 style="font-size:1.08rem;">📊 Student Merit List & Live Check-In Monitor</h3>
+          <h3 style="font-size:1.08rem;">🏆 Candidate Registrations & Live Rank List</h3>
           <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Download Merit List PDF</button>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Rank</th><th>Roll No</th><th>Student Name</th><th>Marks (150)</th>
-                <th class="no-print">Student PIN</th><th class="no-print">Status</th><th class="no-print">Controls</th>
+                <th>Rank</th><th>Hall Ticket</th><th>Candidate Name</th><th>Mobile</th><th>Marks (150)</th>
+                <th class="no-print">Status</th><th class="no-print">Controls</th>
               </tr>
             </thead>
             <tbody id="directorStudentsBody"></tbody>
@@ -323,34 +415,16 @@
     <div id="adminDashboard" style="display: none;">
       <div class="card" style="background:#f5f3ff; border-color:#ddd6fe;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <div><h3 style="font-size:1.05rem; color:#5b21b6;">💰 Exam Base Fee</h3></div>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <input type="number" id="globalExamPriceInput" style="width:110px; padding:8px; border-radius:8px; border:1.5px solid #7c3aed; font-weight:800;">
-            <button class="btn btn-primary btn-sm" onclick="saveGlobalPrice()">💾 Update Price</button>
-            <button class="btn btn-outline btn-sm" onclick="adminLogout()">🚪 Logout</button>
-          </div>
+          <div><h3 style="font-size:1.05rem; color:#5b21b6;">🛡️ Super Admin Controls</h3></div>
+          <button class="btn btn-outline btn-sm" onclick="adminLogout()">🚪 Logout</button>
         </div>
       </div>
-
       <div class="card">
-        <h4 style="margin-bottom:10px; color:var(--primary-dark);">➕ Add New Coaching Institute</h4>
-        <div class="form-grid">
-          <div class="form-group"><label>Institute Name *</label><input type="text" id="newInstName"></div>
-          <div class="form-group"><label>Institute Code *</label><input type="text" id="newInstCode"></div>
-          <div class="form-group"><label>Director Mobile *</label><input type="tel" id="newDirMobile" maxlength="10"></div>
-          <div class="form-group"><label>Director PIN *</label><input type="text" id="newDirPin"></div>
-          <div class="form-group"><label>Discount (%) *</label><input type="number" id="newInstDiscount" value="0" min="0" max="100"></div>
-          <div class="form-group"><label>Roll Numbers (From - To) *</label><div style="display:flex; gap:6px;"><input type="number" id="rollStart" value="101"><input type="number" id="rollEnd" value="150"></div></div>
-        </div>
-        <button class="btn btn-success" onclick="addNewInstitute()">✅ Create Institute</button>
-      </div>
-
-      <div class="card">
-        <h3 style="font-size:1.05rem; margin-bottom:8px;">📋 Registered Institutes</h3>
+        <h3 style="font-size:1.05rem; margin-bottom:8px;">📋 Registered Portals</h3>
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>Institute & Code</th><th>Director & PIN</th><th>Rolls</th><th>Discount & Fee</th><th>Payment</th><th>Status</th><th>Controls</th></tr>
+              <tr><th>Portal / Institute</th><th>Code</th><th>Director Mobile</th><th>PIN</th><th>Status</th></tr>
             </thead>
             <tbody id="adminInstTableBody"></tbody>
           </table>
@@ -373,20 +447,38 @@
   }));
 
   const API_URL = "https://apex.smartstudyhub.workers.dev";
-  const RAZORPAY_KEY_ID = "rzp_live_T18sE5oDk1k8ey";
-  const SESSION_COOKIE_KEY = "TG_TET_P1_JAN8_S2_SESSION";
+  const SESSION_COOKIE_KEY = "TG_TET_P1_FREE_HT_SESSION";
   const PAPER_TAG = "_TETP1S2";
+  const HT_PREFIX = "TET25-";
   const EXAM_DURATION_MINS = 150;
-  const LOBBY_WAIT_MS = 5 * 60 * 1000;
+
+  // Hardcoded Director credentials matching user config
+  const DIRECTOR_MOBILE = "8074645018";
+  const DIRECTOR_PIN = "1234";
+
+  function formatHallTicket(pin) {
+    const clean = String(pin || "").replace(/[^0-9]/g, "");
+    return HT_PREFIX + clean;
+  }
+
+  function extractPinFromHt(htInput) {
+    const clean = String(htInput || "").trim().toUpperCase().replace(HT_PREFIX, "");
+    return clean;
+  }
+
+  function formatScheduleDate(ms) {
+    if (!ms || ms <= 0) return "Not Scheduled Yet";
+    const d = new Date(Number(ms));
+    return d.toLocaleString("en-IN", {
+      day: "2-digit", month: "short", year: "numeric",
+      hour: "2-digit", minute: "2-digit", hour12: true
+    });
+  }
 
   function translateServerMsg(msg) {
     if (!msg) return "An unexpected error occurred.";
     const m = String(msg);
-    if (m.includes("ప్రారంభించలేదు") || m.toLowerCase().includes("not live")) return "The Institute Director has not started the exam yet.";
-    if (m.includes("హోల్డ్") || m.toLowerCase().includes("hold")) return "This institute account is currently on hold.";
-    if (m.includes("కోడ్") || m.toLowerCase().includes("institute")) return "Invalid Institute Code.";
-    if (m.includes("రోల్") || m.toLowerCase().includes("roll")) return "Invalid Roll Number. Enter a roll number within your institute's allotted range.";
-    if (m.includes("PIN") || m.includes("పిన్")) return "Invalid Personal PIN or Mobile Number.";
+    if (m.includes("PIN") || m.includes("పిన్")) return "Invalid Hall Ticket Number or Mobile Number.";
     return m;
   }
 
@@ -409,301 +501,184 @@
   }
 
   function switchStuMode(mode) {
-    document.getElementById('modeInstBtn').classList.toggle('active', mode === 'inst');
-    document.getElementById('modeDirectBtn').classList.toggle('active', mode === 'direct');
-    document.getElementById('instStudentBox').style.display = (mode === 'inst') ? 'block' : 'none';
-    document.getElementById('directStudentBox').style.display = (mode === 'direct') ? 'block' : 'none';
+    document.getElementById('modeNewBtn').classList.toggle('active', mode === 'new');
+    document.getElementById('modeLoginBtn').classList.toggle('active', mode === 'login');
+    document.getElementById('newRegBox').style.display = (mode === 'new') ? 'block' : 'none';
+    document.getElementById('htLoginBox').style.display = (mode === 'login') ? 'block' : 'none';
   }
 
-  async function startDirectStudentFlow() {
+  // Fetch global schedule timestamp from DIRECT_OPEN institute record
+  async function fetchGlobalScheduleMs() {
+    try {
+      const res = await apiCall({ action: "director_login", mobile: DIRECTOR_MOBILE, pin: DIRECTOR_PIN });
+      if (res.ok && res.inst) {
+        return {
+          scheduleMs: Number(res.inst.live_started_ms || 0),
+          students: (res.students || []).filter(s => String(s.roll).endsWith(PAPER_TAG))
+        };
+      }
+    } catch (e) {}
+    return { scheduleMs: 0, students: [] };
+  }
+
+  // ================= FREE STUDENT REGISTRATION & HALL TICKET LOGIN =================
+  async function registerFreeStudent() {
     if (NORMALIZED_QS.length === 0) return alert("⚠️ Question file (tet_p1_jan8_s2.js) failed to load.");
-    const name = document.getElementById('dirStuName').value.trim();
-    const phone = document.getElementById('dirStuPhone').value.trim();
-    const pin = document.getElementById('dirStuPin').value.trim();
+    const name = document.getElementById('regStuName').value.trim();
+    const phone = document.getElementById('regStuPhone').value.trim();
 
     if (!name || phone.length < 10) return alert("Please enter your full name and 10-digit mobile number.");
 
-    if (pin) {
-      const res = await apiCall({ action: "direct_student_login", name, phone, pin, paperTag: PAPER_TAG });
-      if (!res.ok) return alert("❌ " + translateServerMsg(res.error));
-      localStorage.setItem(SESSION_COOKIE_KEY, JSON.stringify({ isDirect: true, name, phone, pin, paperTag: PAPER_TAG }));
-      bootStudentFromCloud(res, true);
-      return;
-    }
-
-    const rzp = new Razorpay({
-      key: RAZORPAY_KEY_ID,
-      amount: 500,
-      currency: "INR",
-      name: "Apex Exams Self-Study",
-      description: "TG TET Paper-I (8 Jan 2025 S2) Grand Test (₹5)",
-      prefill: { name, contact: phone },
-      handler: async function (resp) {
-        const res = await apiCall({
-          action: "direct_student_login",
-          name, phone,
-          paymentId: resp.razorpay_payment_id,
-          paperTag: PAPER_TAG
-        });
-        if (!res.ok) return alert("❌ " + translateServerMsg(res.error));
-        alert("🎉 Payment Successful!\n\nYour Personal PIN for TG TET: " + res.student.personal_pin + "\nSave this PIN to resume or view your scorecard anytime.");
-        localStorage.setItem(SESSION_COOKIE_KEY, JSON.stringify({ isDirect: true, name, phone, pin: res.student.personal_pin, paperTag: PAPER_TAG }));
-        bootStudentFromCloud(res, true);
-      }
+    document.getElementById('regBtn').innerText = "⏳ Generating Hall Ticket...";
+    const res = await apiCall({
+      action: "direct_student_login",
+      name, phone,
+      paymentId: "FREE_WA_EVENT",
+      paperTag: PAPER_TAG
     });
-    rzp.open();
-  }
+    document.getElementById('regBtn').innerText = "🎫 Register & Generate Hall Ticket";
 
-  // ================= SUPER ADMIN =================
-  let adminMasterPass = "";
-  async function adminLogin() {
-    const pass = document.getElementById('adminPass').value.trim();
-    const res = await apiCall({ action: "admin_data", pass });
-    if (!res.ok) return alert("❌ Invalid Super Admin Password!");
-    adminMasterPass = pass;
-    document.getElementById('adminLoginCard').style.display = 'none';
-    document.getElementById('adminDashboard').style.display = 'block';
-    document.getElementById('globalExamPriceInput').value = res.basePrice;
-    renderAdminRows(res.institutes, res.basePrice);
-  }
-  function adminLogout() {
-    adminMasterPass = "";
-    document.getElementById('adminLoginCard').style.display = 'block';
-    document.getElementById('adminDashboard').style.display = 'none';
-  }
-  async function reloadAdmin() {
-    const res = await apiCall({ action: "admin_data", pass: adminMasterPass });
-    if (res.ok) renderAdminRows(res.institutes, res.basePrice);
-  }
-  async function saveGlobalPrice() {
-    const price = parseInt(document.getElementById('globalExamPriceInput').value) || 0;
-    await apiCall({ action: "admin_update_price", pass: adminMasterPass, price });
-    reloadAdmin();
-    alert("✅ Base price updated!");
-  }
-  async function addNewInstitute() {
-    const name = document.getElementById('newInstName').value.trim();
-    const code = document.getElementById('newInstCode').value.trim().toUpperCase();
-    const mobile = document.getElementById('newDirMobile').value.trim();
-    const pin = document.getElementById('newDirPin').value.trim();
-    const discount = parseInt(document.getElementById('newInstDiscount').value) || 0;
-    const rollStart = parseInt(document.getElementById('rollStart').value) || 101;
-    const rollEnd = parseInt(document.getElementById('rollEnd').value) || 150;
-    if (!name || !code || mobile.length < 10 || !pin) return alert("Please fill in all required fields.");
-    await apiCall({ action: "admin_add_inst", pass: adminMasterPass, name, code, mobile, pin, discount, rollStart, rollEnd });
-    reloadAdmin();
-    alert("✅ Institute created successfully!");
-  }
-  async function toggleAdminInst(instId, allowed) {
-    await apiCall({ action: "admin_toggle_inst", pass: adminMasterPass, instId, allowed });
-    reloadAdmin();
-  }
-  async function editDiscount(instId) {
-    const val = prompt("Enter new discount percentage (0 - 100):");
-    if (val === null) return;
-    await apiCall({ action: "admin_discount", pass: adminMasterPass, instId, discount: parseInt(val) || 0 });
-    reloadAdmin();
-  }
-  async function removeInst(instId) {
-    if (!confirm("Are you sure you want to delete this institute?")) return;
-    await apiCall({ action: "admin_delete_inst", pass: adminMasterPass, instId });
-    reloadAdmin();
-  }
-  function renderAdminRows(list, basePrice) {
-    document.getElementById('adminInstTableBody').innerHTML = list.filter(i => i.id !== 'DIRECT_OPEN').map(inst => {
-      const payable = Math.round(basePrice * (100 - inst.discount) / 100);
-      return `<tr>
-        <td><strong>${inst.name}</strong><br><small>Code: <code>${inst.code}</code></small></td>
-        <td>${inst.director_mobile}<br><small>PIN: <code>${inst.director_pin}</code></small></td>
-        <td>${inst.roll_start}–${inst.roll_end}</td>
-        <td>${inst.discount}% OFF<br><strong>₹${payable}</strong></td>
-        <td><span class="status-pill ${inst.fee_paid || payable === 0 ? 'st-active' : 'st-hold'}">${payable === 0 ? 'FREE' : (inst.fee_paid ? 'PAID' : 'UNPAID')}</span></td>
-        <td><span class="status-pill ${inst.admin_allowed ? 'st-active' : 'st-hold'}">${inst.admin_allowed ? 'ACTIVE' : 'HOLD'}</span></td>
-        <td style="display:flex; gap:5px; flex-wrap:wrap;">
-          <button class="btn btn-sm ${inst.admin_allowed ? 'btn-warn' : 'btn-success'}" onclick="toggleAdminInst('${inst.id}', ${!inst.admin_allowed})">${inst.admin_allowed ? '⛔ Hold' : '✅ Allow'}</button>
-          <button class="btn btn-sm btn-primary" onclick="editDiscount('${inst.id}')">🏷️ Disc%</button>
-          <button class="btn btn-sm btn-danger" onclick="removeInst('${inst.id}')">🗑️ Delete</button>
-        </td>
-      </tr>`;
-    }).join('');
-  }
-
-  // ================= DIRECTOR =================
-  let dirCreds = null, dirInstData = null, dirBasePrice = 500, dirPollTimer = null;
-  async function directorLogin() {
-    const mobile = document.getElementById('dirMobile').value.trim();
-    const pin = document.getElementById('dirPin').value.trim();
-    const res = await apiCall({ action: "director_login", mobile, pin });
     if (!res.ok) return alert("❌ " + translateServerMsg(res.error));
-    dirCreds = { mobile, pin };
-    document.getElementById('directorLoginCard').style.display = 'none';
-    document.getElementById('directorDashboard').style.display = 'block';
-    renderDirector(res);
-    clearInterval(dirPollTimer);
-    dirPollTimer = setInterval(refreshDirectorData, 10000);
-  }
-  async function refreshDirectorData() {
-    if (!dirCreds) return;
-    const res = await apiCall({ action: "director_login", mobile: dirCreds.mobile, pin: dirCreds.pin });
-    if (res.ok) renderDirector(res);
-  }
-  function directorLogout() {
-    dirCreds = null;
-    clearInterval(dirPollTimer);
-    document.getElementById('directorLoginCard').style.display = 'block';
-    document.getElementById('directorDashboard').style.display = 'none';
-  }
-  function renderDirector(res) {
-    dirInstData = res.inst;
-    dirBasePrice = res.basePrice;
-    const payable = Math.round(dirBasePrice * (100 - dirInstData.discount) / 100);
-    document.getElementById('dirInstTitle').innerText = "🏛️ " + dirInstData.name;
-    document.getElementById('meritPrintInstName').innerText = dirInstData.name;
-    document.getElementById('dirInstMeta').innerText = "Code: " + dirInstData.code + " • Rolls: " + dirInstData.roll_start + "–" + dirInstData.roll_end;
-    const badge = document.getElementById('dirExamStatusBadge');
-    badge.innerText = dirInstData.exam_live ? "LIVE" : "STOPPED";
-    badge.className = "status-pill " + (dirInstData.exam_live ? 'st-active' : 'st-hold');
-    document.getElementById('dirFeeInfo').innerText = payable === 0 ? "🎉 100% Discount — Free Exam Activation Available!" : ("Fee: ₹" + dirBasePrice + " | Discount: " + dirInstData.discount + "% | Payable: ₹" + payable);
 
-    const act = document.getElementById('dirActionButtons');
-    if (dirInstData.exam_live) {
-      act.innerHTML = `<button class="btn btn-danger btn-sm" onclick="setExamLive(false, false, '')">⏹️ Stop Exam</button>`;
-    } else if (payable === 0 || dirInstData.fee_paid) {
-      act.innerHTML = `<button class="btn btn-success btn-sm" onclick="setExamLive(true, true, '')">▶️ Start Exam (5-Min Lobby)</button>`;
-    } else {
-      act.innerHTML = `<button class="btn btn-success btn-sm" onclick="payDirectorRazorpay(${payable})">💳 Pay ₹${payable} & Start Exam</button>`;
-    }
+    const htNumber = formatHallTicket(res.student.personal_pin);
+    localStorage.setItem(SESSION_COOKIE_KEY, JSON.stringify({
+      name, phone, pin: res.student.personal_pin, htNumber, paperTag: PAPER_TAG
+    }));
+    await bootStudentPortal(res);
+  }
 
-    const tetStudents = res.students.filter(s => String(s.roll).endsWith(PAPER_TAG));
-    document.getElementById('dirLobbyMonitorBadge').innerText = "👥 Checked-In Students: " + tetStudents.length;
-    document.getElementById('directorStudentsBody').innerHTML = tetStudents.length === 0
-      ? `<tr><td colspan="7" style="text-align:center;">No students have checked in for TG TET Paper-I yet.</td></tr>`
-      : tetStudents.map((s, idx) => `<tr>
-          <td><strong>#${idx+1}</strong></td><td><strong>${s.roll.replace(PAPER_TAG, '')}</strong></td><td>${s.name}</td>
-          <td><strong>${s.total} / ${NORMALIZED_QS.length}</strong></td>
-          <td class="no-print"><code>${s.personal_pin}</code></td>
-          <td class="no-print"><span class="status-pill ${s.status==='SUBMITTED' ? 'st-active' : 'st-hold'}">${s.status}</span></td>
-          <td class="no-print" style="display:flex; gap:5px;">
-            <button class="btn btn-warn btn-sm" onclick="dirReExam('${s.roll}')">🔄 Re-Exam</button>
-            <button class="btn btn-primary btn-sm" onclick="dirResetPin('${s.roll}')">🔑 Reset PIN</button>
-          </td>
-        </tr>`).join('');
-  }
-  async function setExamLive(live, paid, paymentId) {
-    await apiCall({ action: "director_exam_state", instId: dirInstData.id, live, paid, paymentId, liveStartedMs: live ? Date.now() : 0 });
-    refreshDirectorData();
-  }
-  function payDirectorRazorpay(payable) {
-    const rzp = new Razorpay({
-      key: RAZORPAY_KEY_ID, amount: payable * 100, currency: "INR",
-      name: "Apex Exams Portal", description: "TG TET Paper-I Fee (" + dirInstData.name + ")",
-      handler: (resp) => setExamLive(true, true, resp.razorpay_payment_id)
+  async function loginWithHallTicket() {
+    if (NORMALIZED_QS.length === 0) return alert("⚠️ Question file (tet_p1_jan8_s2.js) failed to load.");
+    const name = document.getElementById('logStuName').value.trim();
+    const phone = document.getElementById('logStuPhone').value.trim();
+    const htInput = document.getElementById('logStuHt').value.trim();
+    const pin = extractPinFromHt(htInput);
+
+    if (!name || phone.length < 10 || !pin) return alert("Please enter your Name, 10-digit Mobile Number, and Hall Ticket Number.");
+
+    document.getElementById('htLoginBtn').innerText = "⏳ Verifying Hall Ticket...";
+    const res = await apiCall({
+      action: "direct_student_login",
+      name, phone, pin,
+      paperTag: PAPER_TAG
     });
-    rzp.open();
-  }
-  async function dirReExam(rollFull) {
-    if (!confirm("Allow Re-Exam for Roll " + rollFull.replace(PAPER_TAG, '') + "?")) return;
-    await apiCall({ action: "director_reexam", instId: dirInstData.id, roll: rollFull });
-    refreshDirectorData();
-  }
-  async function dirResetPin(rollFull) {
-    const res = await apiCall({ action: "director_reset_pin", instId: dirInstData.id, roll: rollFull });
-    if (res.ok) { refreshDirectorData(); alert("🔑 New PIN for Roll " + rollFull.replace(PAPER_TAG, '') + ": " + res.newPin); }
+    document.getElementById('htLoginBtn').innerText = "🚀 Login to Exam Portal";
+
+    if (!res.ok) return alert("❌ " + translateServerMsg(res.error));
+
+    const htNumber = formatHallTicket(res.student.personal_pin);
+    localStorage.setItem(SESSION_COOKIE_KEY, JSON.stringify({
+      name, phone, pin: res.student.personal_pin, htNumber, paperTag: PAPER_TAG
+    }));
+    await bootStudentPortal(res);
   }
 
-  // ================= STUDENT & EXAM ENGINE =================
   let stuSession = null, currentIdx = 0, answersMap = {}, examEndTimeMs = 0, timerInterval = null, lobbyInterval = null;
 
-  async function studentLogin() {
-    if (NORMALIZED_QS.length === 0) return alert("⚠️ Question file (tet_p1_jan8_s2.js) failed to load.");
-    const code = document.getElementById('stuInstCode').value.trim().toUpperCase();
-    const rawRoll = document.getElementById('stuRoll').value.trim();
-    const name = document.getElementById('stuName').value.trim();
-    const phone = document.getElementById('stuPhone').value.trim();
-    const pin = document.getElementById('stuPersonalPin').value.trim();
-
-    if (!code || !rawRoll || !name || phone.length < 10) return alert("Please fill in all required details.");
-    document.getElementById('stuLoginBtn').innerText = "⏳ Connecting to Server...";
-
-    const taggedRoll = rawRoll + PAPER_TAG;
-    const res = await apiCall({ action: "student_login", code, roll: taggedRoll, name, phone, pin });
-    document.getElementById('stuLoginBtn').innerText = "🚀 Join Lobby / Resume TG TET Paper-I";
-
-    if (!res.ok) return alert("❌ " + translateServerMsg(res.error));
-    if (res.isNew) alert("🎉 Welcome " + name + "!\n\nYour Personal PIN for TG TET: " + res.student.personal_pin + "\nPlease note down this PIN.");
-
-    localStorage.setItem(SESSION_COOKIE_KEY, JSON.stringify({ isDirect: false, code, roll: taggedRoll, name, phone, pin: res.student.personal_pin }));
-    bootStudentFromCloud(res, false);
-  }
-
-  function bootStudentFromCloud(res, isDirect) {
+  async function bootStudentPortal(res) {
     const stu = res.student;
-    stuSession = { id: stu.id, instName: res.instName, roll: String(stu.roll).replace(PAPER_TAG, ''), name: stu.name, pin: stu.personal_pin };
+    const htNumber = formatHallTicket(stu.personal_pin);
+    stuSession = {
+      id: stu.id,
+      name: stu.name,
+      phone: stu.phone || "",
+      pin: stu.personal_pin,
+      htNumber: htNumber
+    };
     answersMap = JSON.parse(stu.answers_json || "{}");
-
-    const rawEnd = Number(stu.exam_end_ms);
-    const maxEnd = Date.now() + (EXAM_DURATION_MINS * 60 * 1000);
-    examEndTimeMs = (rawEnd > maxEnd + 60000) ? maxEnd : rawEnd;
     currentIdx = Number(stu.last_idx || 0);
 
     document.getElementById('roleSwitcher').style.display = 'none';
     document.getElementById('studentLoginCard').style.display = 'none';
 
-    if (stu.status === "SUBMITTED" || Date.now() >= examEndTimeMs) {
+    if (stu.status === "SUBMITTED") {
       submitExam(true);
       return;
     }
 
-    const serverStartMs = Number(res.liveStartedMs || res.live_started_ms || 0);
-    const localLobbyKey = "LOBBY_END_" + stu.id;
-    let lobbyEndMs = 0;
+    const schedInfo = await fetchGlobalScheduleMs();
+    const scheduleMs = schedInfo.scheduleMs;
 
-    if (serverStartMs > 0) {
-      lobbyEndMs = serverStartMs + LOBBY_WAIT_MS;
-    } else if (!isDirect && Object.keys(answersMap).length === 0) {
-      const savedLobby = Number(localStorage.getItem(localLobbyKey) || 0);
-      if (savedLobby > 0) lobbyEndMs = savedLobby;
-      else if (res.isNew) {
-        lobbyEndMs = Date.now() + LOBBY_WAIT_MS;
-        localStorage.setItem(localLobbyKey, String(lobbyEndMs));
-      }
-    }
+    // Populate Hall Ticket Card
+    document.getElementById('htDisplayCode').innerText = htNumber;
+    document.getElementById('htDisplayName').innerText = stuSession.name;
+    document.getElementById('htDisplayPhone').innerText = stuSession.phone || "Registered";
+    document.getElementById('htDisplaySchedule').innerText = formatScheduleDate(scheduleMs);
 
-    if (!isDirect && lobbyEndMs > Date.now() && Object.keys(answersMap).length === 0) {
-      startWaitingLobby(lobbyEndMs);
+    if (!scheduleMs || scheduleMs <= 0) {
+      // Exam NOT scheduled yet
+      showHallTicketLobby(0);
+    } else if (Date.now() < scheduleMs) {
+      // Scheduled for future -> Show countdown
+      showHallTicketLobby(scheduleMs);
     } else {
+      // Scheduled time has arrived -> Launch Exam!
+      const calculatedEnd = scheduleMs + (EXAM_DURATION_MINS * 60 * 1000);
+      examEndTimeMs = (Date.now() < calculatedEnd) ? calculatedEnd : (Date.now() + EXAM_DURATION_MINS * 60 * 1000);
       launchActualExamScreen();
     }
   }
 
-  function startWaitingLobby(lobbyEndMs) {
+  function showHallTicketLobby(scheduleMs) {
     document.getElementById('waitingLobbyScreen').style.display = 'block';
-    document.getElementById('lobbyInstTitle').innerText = stuSession.instName;
-    document.getElementById('lobbyCandidateInfo').innerText = "Roll No: " + stuSession.roll + " • " + stuSession.name;
-    document.getElementById('lobbyPinDisplay').innerText = "🔑 Personal PIN: " + stuSession.pin;
-
     clearInterval(lobbyInterval);
-    function tickLobby() {
-      const rem = Math.ceil((lobbyEndMs - Date.now()) / 1000);
-      if (rem <= 0) {
+
+    if (!scheduleMs || scheduleMs <= 0) {
+      document.getElementById('scheduleStatusPill').innerText = "🎫 HALL TICKET GENERATED • AWAITING SCHEDULE";
+      document.getElementById('notScheduledBox').style.display = 'block';
+      document.getElementById('scheduledCountdownBox').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('scheduleStatusPill').innerText = "⏰ EXAM SCHEDULED • COUNTDOWN LIVE";
+    document.getElementById('notScheduledBox').style.display = 'none';
+    document.getElementById('scheduledCountdownBox').style.display = 'block';
+
+    function tickSchedule() {
+      const remSec = Math.ceil((scheduleMs - Date.now()) / 1000);
+      if (remSec <= 0) {
         clearInterval(lobbyInterval);
         document.getElementById('waitingLobbyScreen').style.display = 'none';
         examEndTimeMs = Date.now() + (EXAM_DURATION_MINS * 60 * 1000);
         launchActualExamScreen();
         return;
       }
-      const m = String(Math.floor(rem / 60)).padStart(2, '0');
-      const s = String(rem % 60).padStart(2, '0');
-      document.getElementById('lobbyCountdownDisplay').innerText = m + ":" + s;
+      const d = Math.floor(remSec / 86400);
+      const h = String(Math.floor((remSec % 86400) / 3600)).padStart(2, '0');
+      const m = String(Math.floor((remSec % 3600) / 60)).padStart(2, '0');
+      const s = String(remSec % 60).padStart(2, '0');
+      document.getElementById('lobbyCountdownDisplay').innerText = (d > 0 ? (d + "d : ") : "") + h + "h : " + m + "m : " + s + "s";
     }
-    tickLobby();
-    lobbyInterval = setInterval(tickLobby, 1000);
+    tickSchedule();
+    lobbyInterval = setInterval(tickSchedule, 1000);
+  }
+
+  async function refreshScheduleStatus() {
+    const saved = localStorage.getItem(SESSION_COOKIE_KEY);
+    if (!saved) return;
+    const creds = JSON.parse(saved);
+    const res = await apiCall({ action: "direct_student_login", ...creds });
+    if (res.ok) await bootStudentPortal(res);
+  }
+
+  function downloadHallTicketImage() {
+    const el = document.getElementById('hallTicketCaptureArea');
+    if (typeof html2canvas === "undefined") {
+      alert("Please take a screenshot of your Hall Ticket card.");
+      return;
+    }
+    html2canvas(el, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+      const link = document.createElement("a");
+      link.download = `${stuSession.htNumber}_HallTicket.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
   }
 
   function launchActualExamScreen() {
     document.getElementById('waitingLobbyScreen').style.display = 'none';
     document.getElementById('examScreen').style.display = 'block';
-    document.getElementById('stuPinBanner').innerText = "🔑 PIN: " + stuSession.pin;
+    document.getElementById('stuHtBanner').innerText = "🎫 " + stuSession.htNumber;
     buildPalette();
     renderQuestion(currentIdx);
     startTimer();
@@ -813,13 +788,20 @@
       await apiCall({ action: "student_submit", studentId: stuSession.id, answersMap, arith: 0, reas: 0, total: correct });
     }
 
-    document.getElementById('printInstName').innerText = stuSession.instName;
     document.getElementById('finalScoreText').innerHTML = correct + " <span>/ " + NORMALIZED_QS.length + "</span>";
-    document.getElementById('candidateMetaText').innerHTML = "<span>🆔 Roll: <strong>" + stuSession.roll + "</strong></span><span>•</span><span>👤 " + stuSession.name + "</span><span>•</span><span>🔑 PIN: <strong>" + stuSession.pin + "</strong></span>";
+    document.getElementById('candidateMetaText').innerHTML = "<span>🎫 Hall Ticket: <strong>" + stuSession.htNumber + "</strong></span><span>•</span><span>👤 " + stuSession.name + "</span>";
     document.getElementById('statCorrect').innerText = correct;
     document.getElementById('statWrong').innerText = wrong;
     document.getElementById('statSkip').innerText = skipped;
     document.getElementById('reviewContainer').innerHTML = revHTML;
+
+    // Fetch live State Rank among all submitted students
+    const schedInfo = await fetchGlobalScheduleMs();
+    const submittedList = schedInfo.students.filter(s => s.status === "SUBMITTED").sort((a, b) => Number(b.total) - Number(a.total));
+    const myRankIdx = submittedList.findIndex(s => String(s.personal_pin) === String(stuSession.pin));
+    const rankNum = (myRankIdx >= 0) ? (myRankIdx + 1) : 1;
+    const totalCandidates = Math.max(submittedList.length, 1);
+    document.getElementById('liveRankBadge').innerText = `🏆 State Rank: #${rankNum} out of ${totalCandidates} Candidates`;
   }
 
   function logoutStudent() {
@@ -828,15 +810,152 @@
     location.reload();
   }
 
+  // ================= DIRECTOR PANEL (SCHEDULE & LIVE RANK MONITOR) =================
+  let dirCreds = null, dirInstData = null, dirPollTimer = null;
+
+  async function directorLogin() {
+    const mobile = document.getElementById('dirMobile').value.trim();
+    const pin = document.getElementById('dirPin').value.trim();
+    const res = await apiCall({ action: "director_login", mobile, pin });
+    if (!res.ok) return alert("❌ " + translateServerMsg(res.error));
+    dirCreds = { mobile, pin };
+    document.getElementById('directorLoginCard').style.display = 'none';
+    document.getElementById('directorDashboard').style.display = 'block';
+    renderDirector(res);
+    clearInterval(dirPollTimer);
+    dirPollTimer = setInterval(refreshDirectorData, 10000);
+  }
+
+  async function refreshDirectorData() {
+    if (!dirCreds) return;
+    const res = await apiCall({ action: "director_login", mobile: dirCreds.mobile, pin: dirCreds.pin });
+    if (res.ok) renderDirector(res);
+  }
+
+  function directorLogout() {
+    dirCreds = null;
+    clearInterval(dirPollTimer);
+    document.getElementById('directorLoginCard').style.display = 'block';
+    document.getElementById('directorDashboard').style.display = 'none';
+  }
+
+  function renderDirector(res) {
+    dirInstData = res.inst;
+    const schedMs = Number(dirInstData.live_started_ms || 0);
+    document.getElementById('dirInstMeta').innerText = "Controller Mobile: " + dirInstData.director_mobile + " • Portal: Free State-Wide TG TET";
+
+    const kpiSched = document.getElementById('kpiSchedState');
+    if (schedMs > 0) {
+      kpiSched.innerText = (Date.now() >= schedMs) ? "LIVE NOW" : "SCHEDULED";
+      kpiSched.style.color = "#16a34a";
+      document.getElementById('currentScheduleDisplay').innerText = "✅ Currently Scheduled For: " + formatScheduleDate(schedMs);
+    } else {
+      kpiSched.innerText = "NOT SET";
+      kpiSched.style.color = "#dc2626";
+      document.getElementById('currentScheduleDisplay').innerText = "⚠️ Status: Exam Not Scheduled Yet (Candidates see 'Not Scheduled').";
+    }
+
+    const tetStudents = (res.students || []).filter(s => String(s.roll).endsWith(PAPER_TAG));
+    const submittedCount = tetStudents.filter(s => s.status === "SUBMITTED").length;
+    const inProgressCount = tetStudents.length - submittedCount;
+
+    document.getElementById('kpiTotalReg').innerText = tetStudents.length;
+    document.getElementById('kpiInProgress').innerText = inProgressCount;
+    document.getElementById('kpiSubmitted').innerText = submittedCount;
+
+    // Sort: Submitted first by marks desc, then In-Progress
+    const sorted = [...tetStudents].sort((a, b) => {
+      if (a.status === "SUBMITTED" && b.status !== "SUBMITTED") return -1;
+      if (a.status !== "SUBMITTED" && b.status === "SUBMITTED") return 1;
+      return Number(b.total) - Number(a.total);
+    });
+
+    document.getElementById('directorStudentsBody').innerHTML = sorted.length === 0
+      ? `<tr><td colspan="7" style="text-align:center;">No candidates registered yet.</td></tr>`
+      : sorted.map((s, idx) => {
+          const htNo = formatHallTicket(s.personal_pin);
+          const phoneClean = String(s.roll).replace(PAPER_TAG, '');
+          const isSub = s.status === 'SUBMITTED';
+          return `<tr>
+            <td><strong>${isSub ? ('#' + (idx + 1)) : '-'}</strong></td>
+            <td><code><strong>${htNo}</strong></code></td>
+            <td>${s.name}</td>
+            <td>${phoneClean}</td>
+            <td><strong>${isSub ? (s.total + ' / ' + NORMALIZED_QS.length) : '-'}</strong></td>
+            <td class="no-print"><span class="status-pill ${isSub ? 'st-active' : 'st-wait'}">${isSub ? 'SUBMITTED' : 'REGISTERED'}</span></td>
+            <td class="no-print" style="display:flex; gap:5px;">
+              <button class="btn btn-warn btn-sm" onclick="dirReExam('${s.roll}')">🔄 Re-Exam</button>
+            </td>
+          </tr>`;
+        }).join('');
+  }
+
+  async function saveExamSchedule() {
+    const val = document.getElementById('examScheduleInput').value;
+    if (!val) return alert("Please select a valid Exam Date and Time.");
+    const targetMs = new Date(val).getTime();
+    if (isNaN(targetMs)) return alert("Invalid date/time format.");
+
+    await apiCall({
+      action: "director_exam_state",
+      instId: dirInstData.id,
+      live: true,
+      paid: true,
+      paymentId: "FREE_SCHEDULED",
+      liveStartedMs: targetMs
+    });
+    refreshDirectorData();
+    alert("✅ Exam Scheduled for " + formatScheduleDate(targetMs) + "!\nCountdown is now live for all candidates.");
+  }
+
+  async function clearExamSchedule() {
+    if (!confirm("Reset schedule to 'Exam Not Scheduled Yet'?")) return;
+    await apiCall({
+      action: "director_exam_state",
+      instId: dirInstData.id,
+      live: false,
+      paid: true,
+      paymentId: "",
+      liveStartedMs: 0
+    });
+    refreshDirectorData();
+  }
+
+  async function dirReExam(rollFull) {
+    if (!confirm("Reset attempt for this candidate?")) return;
+    await apiCall({ action: "director_reexam", instId: dirInstData.id, roll: rollFull });
+    refreshDirectorData();
+  }
+
+  // ================= SUPER ADMIN =================
+  let adminMasterPass = "";
+  async function adminLogin() {
+    const pass = document.getElementById('adminPass').value.trim();
+    const res = await apiCall({ action: "admin_data", pass });
+    if (!res.ok) return alert("❌ Invalid Super Admin Password!");
+    adminMasterPass = pass;
+    document.getElementById('adminLoginCard').style.display = 'none';
+    document.getElementById('adminDashboard').style.display = 'block';
+    document.getElementById('adminInstTableBody').innerHTML = (res.institutes || []).map(inst => `<tr>
+      <td><strong>${inst.name}</strong></td><td><code>${inst.code}</code></td>
+      <td>${inst.director_mobile}</td><td><code>${inst.director_pin}</code></td>
+      <td><span class="status-pill ${inst.admin_allowed ? 'st-active' : 'st-hold'}">${inst.admin_allowed ? 'ACTIVE' : 'HOLD'}</span></td>
+    </tr>`).join('');
+  }
+  function adminLogout() {
+    adminMasterPass = "";
+    document.getElementById('adminLoginCard').style.display = 'block';
+    document.getElementById('adminDashboard').style.display = 'none';
+  }
+
+  // AUTO-RESTORE SESSION ON PAGE LOAD
   window.addEventListener("load", async () => {
     const saved = localStorage.getItem(SESSION_COOKIE_KEY);
     if (!saved) return;
     try {
       const creds = JSON.parse(saved);
-      const res = creds.isDirect
-        ? await apiCall({ action: "direct_student_login", ...creds })
-        : await apiCall({ action: "student_login", ...creds });
-      if (res.ok) bootStudentFromCloud(res, !!creds.isDirect);
+      const res = await apiCall({ action: "direct_student_login", ...creds });
+      if (res.ok) await bootStudentPortal(res);
       else localStorage.removeItem(SESSION_COOKIE_KEY);
     } catch (e) { localStorage.removeItem(SESSION_COOKIE_KEY); }
   });
