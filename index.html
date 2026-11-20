@@ -113,12 +113,17 @@
     .rev-correct { border-left: 5px solid #16a34a; }
     .rev-wrong { border-left: 5px solid #dc2626; }
     .rev-skip { border-left: 5px solid #94a3b8; }
+
+    /* Phone column hidden by default on screen */
+    .col-phone-print { display: none; }
+
     @media print {
       header, .no-print, .role-tabs { display: none !important; }
       body { background: white; padding: 0; }
       .card, .scorecard-wrap { box-shadow: none; }
       .score-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .print-header { display: block !important; text-align: center; margin-bottom: 14px; border-bottom: 2px solid #000; padding-bottom: 8px; }
+      body.include-phone-pdf .col-phone-print { display: table-cell !important; }
     }
     .print-header { display: none; }
   </style>
@@ -385,16 +390,21 @@
           <h2>TG TET Paper-I (Telugu) — Official State Merit List</h2>
           <p>Apex Exams Portal • Free State-Wide Grand Test</p>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;" class="no-print">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;" class="no-print">
           <h3 style="font-size:1.08rem;">🏆 Candidate Registrations & Live Rank List</h3>
-          <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Download Merit List PDF</button>
+          <button class="btn btn-primary btn-sm" onclick="downloadMeritListPdf()">🖨️ Download Merit List PDF</button>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Rank</th><th>Hall Ticket</th><th>Candidate Name</th><th>Mobile</th><th>Marks (150)</th>
-                <th class="no-print">Status</th><th class="no-print">Controls</th>
+                <th>Rank</th>
+                <th>Hall Ticket</th>
+                <th>Candidate Name</th>
+                <th class="col-phone-print">Mobile Number</th>
+                <th>Marks (150)</th>
+                <th class="no-print">Status</th>
+                <th class="no-print">Controls</th>
               </tr>
             </thead>
             <tbody id="directorStudentsBody"></tbody>
@@ -415,16 +425,30 @@
     <div id="adminDashboard" style="display: none;">
       <div class="card" style="background:#f5f3ff; border-color:#ddd6fe;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <div><h3 style="font-size:1.05rem; color:#5b21b6;">🛡️ Super Admin Controls</h3></div>
-          <button class="btn btn-outline btn-sm" onclick="adminLogout()">🚪 Logout</button>
+          <div>
+            <h3 style="font-size:1.05rem; color:#5b21b6;">🛡️ Super Admin — Manage Directors & Portals</h3>
+            <p style="font-size:0.8rem; color:#64748b;">Open Director (DIRECT_OPEN) is protected. You can delete any other director/institute below.</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-primary btn-sm" onclick="reloadAdmin()">🔄 Refresh</button>
+            <button class="btn btn-outline btn-sm" onclick="adminLogout()">🚪 Logout</button>
+          </div>
         </div>
       </div>
+
       <div class="card">
-        <h3 style="font-size:1.05rem; margin-bottom:8px;">📋 Registered Portals</h3>
+        <h3 style="font-size:1.05rem; margin-bottom:8px;">📋 Registered Directors & Institutes</h3>
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>Portal / Institute</th><th>Code</th><th>Director Mobile</th><th>PIN</th><th>Status</th></tr>
+              <tr>
+                <th>Portal / Institute</th>
+                <th>Code</th>
+                <th>Director Mobile</th>
+                <th>PIN</th>
+                <th>Status</th>
+                <th>Controls</th>
+              </tr>
             </thead>
             <tbody id="adminInstTableBody"></tbody>
           </table>
@@ -452,7 +476,6 @@
   const HT_PREFIX = "TET25-";
   const EXAM_DURATION_MINS = 150;
 
-  // Hardcoded Director credentials matching user config
   const DIRECTOR_MOBILE = "8074645018";
   const DIRECTOR_PIN = "1234";
 
@@ -462,8 +485,7 @@
   }
 
   function extractPinFromHt(htInput) {
-    const clean = String(htInput || "").trim().toUpperCase().replace(HT_PREFIX, "");
-    return clean;
+    return String(htInput || "").trim().toUpperCase().replace(HT_PREFIX, "");
   }
 
   function formatScheduleDate(ms) {
@@ -507,7 +529,6 @@
     document.getElementById('htLoginBox').style.display = (mode === 'login') ? 'block' : 'none';
   }
 
-  // Fetch global schedule timestamp from DIRECT_OPEN institute record
   async function fetchGlobalScheduleMs() {
     try {
       const res = await apiCall({ action: "director_login", mobile: DIRECTOR_MOBILE, pin: DIRECTOR_PIN });
@@ -581,7 +602,7 @@
     stuSession = {
       id: stu.id,
       name: stu.name,
-      phone: stu.phone || "",
+      phone: stu.phone || String(stu.roll).replace(PAPER_TAG, ''),
       pin: stu.personal_pin,
       htNumber: htNumber
     };
@@ -599,20 +620,16 @@
     const schedInfo = await fetchGlobalScheduleMs();
     const scheduleMs = schedInfo.scheduleMs;
 
-    // Populate Hall Ticket Card
     document.getElementById('htDisplayCode').innerText = htNumber;
     document.getElementById('htDisplayName').innerText = stuSession.name;
     document.getElementById('htDisplayPhone').innerText = stuSession.phone || "Registered";
     document.getElementById('htDisplaySchedule').innerText = formatScheduleDate(scheduleMs);
 
     if (!scheduleMs || scheduleMs <= 0) {
-      // Exam NOT scheduled yet
       showHallTicketLobby(0);
     } else if (Date.now() < scheduleMs) {
-      // Scheduled for future -> Show countdown
       showHallTicketLobby(scheduleMs);
     } else {
-      // Scheduled time has arrived -> Launch Exam!
       const calculatedEnd = scheduleMs + (EXAM_DURATION_MINS * 60 * 1000);
       examEndTimeMs = (Date.now() < calculatedEnd) ? calculatedEnd : (Date.now() + EXAM_DURATION_MINS * 60 * 1000);
       launchActualExamScreen();
@@ -795,7 +812,6 @@
     document.getElementById('statSkip').innerText = skipped;
     document.getElementById('reviewContainer').innerHTML = revHTML;
 
-    // Fetch live State Rank among all submitted students
     const schedInfo = await fetchGlobalScheduleMs();
     const submittedList = schedInfo.students.filter(s => s.status === "SUBMITTED").sort((a, b) => Number(b.total) - Number(a.total));
     const myRankIdx = submittedList.findIndex(s => String(s.personal_pin) === String(stuSession.pin));
@@ -863,7 +879,6 @@
     document.getElementById('kpiInProgress').innerText = inProgressCount;
     document.getElementById('kpiSubmitted').innerText = submittedCount;
 
-    // Sort: Submitted first by marks desc, then In-Progress
     const sorted = [...tetStudents].sort((a, b) => {
       if (a.status === "SUBMITTED" && b.status !== "SUBMITTED") return -1;
       if (a.status !== "SUBMITTED" && b.status === "SUBMITTED") return 1;
@@ -880,7 +895,7 @@
             <td><strong>${isSub ? ('#' + (idx + 1)) : '-'}</strong></td>
             <td><code><strong>${htNo}</strong></code></td>
             <td>${s.name}</td>
-            <td>${phoneClean}</td>
+            <td class="col-phone-print">${phoneClean}</td>
             <td><strong>${isSub ? (s.total + ' / ' + NORMALIZED_QS.length) : '-'}</strong></td>
             <td class="no-print"><span class="status-pill ${isSub ? 'st-active' : 'st-wait'}">${isSub ? 'SUBMITTED' : 'REGISTERED'}</span></td>
             <td class="no-print" style="display:flex; gap:5px;">
@@ -888,6 +903,23 @@
             </td>
           </tr>`;
         }).join('');
+  }
+
+  function downloadMeritListPdf() {
+    const includePhone = confirm(
+      "Do you want to INCLUDE candidate mobile numbers in the Merit List PDF?\n\n" +
+      "• Click OK = Include Mobile Numbers\n" +
+      "• Click Cancel = Hide Mobile Numbers"
+    );
+    if (includePhone) {
+      document.body.classList.add('include-phone-pdf');
+    } else {
+      document.body.classList.remove('include-phone-pdf');
+    }
+    window.print();
+    setTimeout(() => {
+      document.body.classList.remove('include-phone-pdf');
+    }, 1000);
   }
 
   async function saveExamSchedule() {
@@ -927,7 +959,7 @@
     refreshDirectorData();
   }
 
-  // ================= SUPER ADMIN =================
+  // ================= SUPER ADMIN (WITH DELETE FOR NON-OPEN DIRECTORS) =================
   let adminMasterPass = "";
   async function adminLogin() {
     const pass = document.getElementById('adminPass').value.trim();
@@ -936,12 +968,43 @@
     adminMasterPass = pass;
     document.getElementById('adminLoginCard').style.display = 'none';
     document.getElementById('adminDashboard').style.display = 'block';
-    document.getElementById('adminInstTableBody').innerHTML = (res.institutes || []).map(inst => `<tr>
-      <td><strong>${inst.name}</strong></td><td><code>${inst.code}</code></td>
-      <td>${inst.director_mobile}</td><td><code>${inst.director_pin}</code></td>
-      <td><span class="status-pill ${inst.admin_allowed ? 'st-active' : 'st-hold'}">${inst.admin_allowed ? 'ACTIVE' : 'HOLD'}</span></td>
-    </tr>`).join('');
+    renderAdminRows(res.institutes || []);
   }
+
+  async function reloadAdmin() {
+    if (!adminMasterPass) return;
+    const res = await apiCall({ action: "admin_data", pass: adminMasterPass });
+    if (res.ok) renderAdminRows(res.institutes || []);
+  }
+
+  function renderAdminRows(institutes) {
+    document.getElementById('adminInstTableBody').innerHTML = institutes.length === 0
+      ? `<tr><td colspan="6" style="text-align:center;">No directors found.</td></tr>`
+      : institutes.map(inst => {
+          const isOpenDir = (inst.id === 'DIRECT_OPEN' || String(inst.code).toUpperCase() === 'DIRECT_OPEN');
+          return `<tr>
+            <td><strong>${inst.name}</strong></td>
+            <td><code>${inst.code}</code></td>
+            <td>${inst.director_mobile}</td>
+            <td><code>${inst.director_pin}</code></td>
+            <td><span class="status-pill ${inst.admin_allowed ? 'st-active' : 'st-hold'}">${inst.admin_allowed ? 'ACTIVE' : 'HOLD'}</span></td>
+            <td>
+              ${isOpenDir
+                ? `<span style="font-size:0.78rem; font-weight:800; color:#5b21b6;">🔒 Protected (Open)</span>`
+                : `<button class="btn btn-danger btn-sm" onclick="removeDirectorInst('${inst.id}', '${inst.name}')">🗑️ Delete</button>`
+              }
+            </td>
+          </tr>`;
+        }).join('');
+  }
+
+  async function removeDirectorInst(instId, instName) {
+    if (!confirm(`Are you sure you want to permanently delete "${instName}"?`)) return;
+    await apiCall({ action: "admin_delete_inst", pass: adminMasterPass, instId });
+    reloadAdmin();
+    alert("✅ Deleted successfully!");
+  }
+
   function adminLogout() {
     adminMasterPass = "";
     document.getElementById('adminLoginCard').style.display = 'block';
