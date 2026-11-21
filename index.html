@@ -472,14 +472,12 @@
 
   const API_URL = "https://apex.smartstudyhub.workers.dev";
   const SESSION_COOKIE_KEY = "TG_TET_P1_FREE_HT_SESSION";
-  const SCHEDULE_CACHE_KEY = "TG_TET_P1_SCHEDULE_MS";
   const PAPER_TAG = "_TETP1S2";
   const HT_PREFIX = "TET25-";
   const EXAM_DURATION_MINS = 150;
 
-  // Director credentials
-  const DIRECTOR_MOBILE = "8074645018";
-  const DIRECTOR_PIN = "1234";
+  // Backend admin key used strictly to read/write global schedule timestamp in basePrice field
+  const SCHED_SYNC_KEY = "admin2026";
 
   function formatHallTicket(pin) {
     const clean = String(pin || "").replace(/[^0-9]/g, "");
@@ -531,43 +529,18 @@
     document.getElementById('htLoginBox').style.display = (mode === 'login') ? 'block' : 'none';
   }
 
-  // Extract schedule timestamp reliably from either liveStartedMs or live_started_ms or discount fallback
-  function extractScheduleFromInst(inst) {
-    if (!inst) return 0;
-    const ms1 = Number(inst.liveStartedMs || 0);
-    const ms2 = Number(inst.live_started_ms || 0);
-    const ms3 = Number(inst.discount || 0); // Fallback if backend stores custom timestamp in discount
-    if (ms1 > 1700000000000) return ms1;
-    if (ms2 > 1700000000000) return ms2;
-    if (ms3 > 1700000000000) return ms3;
-    return 0;
-  }
-
+  // Fetch global schedule timestamp reliably from Cloud (stored as seconds in basePrice)
   async function fetchGlobalScheduleMs() {
     try {
-      const res = await apiCall({ action: "director_login", mobile: DIRECTOR_MOBILE, pin: DIRECTOR_PIN });
-      if (res.ok && res.inst) {
-        let sched = extractScheduleFromInst(res.inst);
-        if (sched > 0) {
-          localStorage.setItem(SCHEDULE_CACHE_KEY, String(sched));
-        } else {
-          // Check if explicitly cleared (exam_live === 0 / false)
-          if (!res.inst.exam_live) {
-            localStorage.removeItem(SCHEDULE_CACHE_KEY);
-          } else {
-            sched = Number(localStorage.getItem(SCHEDULE_CACHE_KEY) || 0);
-          }
-        }
-        return {
-          scheduleMs: sched,
-          students: (res.students || []).filter(s => String(s.roll).endsWith(PAPER_TAG))
-        };
+      const res = await apiCall({ action: "admin_data", pass: SCHED_SYNC_KEY });
+      if (res.ok) {
+        const bp = Number(res.basePrice || 0);
+        // If basePrice > 1,700,000,000, it is a valid Unix timestamp in seconds
+        const scheduleMs = (bp > 1700000000) ? (bp * 1000) : 0;
+        return { scheduleMs };
       }
     } catch (e) {}
-    return {
-      scheduleMs: Number(localStorage.getItem(SCHEDULE_CACHE_KEY) || 0),
-      students: []
-    };
+    return { scheduleMs: 0 };
   }
 
   // ================= FREE STUDENT REGISTRATION & HALL TICKET LOGIN =================
@@ -666,7 +639,7 @@
       return;
     }
 
-    // Auto-poll every 10 seconds while in lobby so countdown starts automatically when Director schedules
+    // Auto-poll every 8 seconds while in lobby so countdown starts automatically when Director schedules
     clearInterval(schedulePollTimer);
     schedulePollTimer = setInterval(async () => {
       const latest = await fetchGlobalScheduleMs();
@@ -682,7 +655,7 @@
           showHallTicketLobby(latest.scheduleMs);
         }
       }
-    }, 10000);
+    }, 8000);
   }
 
   function showHallTicketLobby(scheduleMs) {
@@ -865,12 +838,23 @@
     document.getElementById('statSkip').innerText = skipped;
     document.getElementById('reviewContainer').innerHTML = revHTML;
 
-    const schedInfo = await fetchGlobalScheduleMs();
-    const submittedList = schedInfo.students.filter(s => s.status === "SUBMITTED").sort((a, b) => Number(b.total) - Number(a.total));
-    const myRankIdx = submittedList.findIndex(s => String(s.personal_pin) === String(stuSession.pin));
-    const rankNum = (myRankIdx >= 0) ? (myRankIdx + 1) : 1;
-    const totalCandidates = Math.max(submittedList.length, 1);
-    document.getElementById('liveRankBadge').innerText = `🏆 State Rank: #${rankNum} out of ${totalCandidates} Candidates`;
+    // Calculate live State Rank using Director student list
+    try {
+      const rankRes = await apiCall({ action: "director_login", mobile: "8074645018", pin: "1234" });
+      if (rankRes.ok && rankRes.students) {
+        const submittedList = rankRes.students
+          .filter(s => String(s.roll).endsWith(PAPER_TAG) && s.status === "SUBMITTED")
+          .sort((a, b) => Number(b.total) - Number(a.total));
+        const myRankIdx = submittedList.findIndex(s => String(s.personal_pin) === String(stuSession.pin));
+        const rankNum = (myRankIdx >= 0) ? (myRankIdx + 1) : 1;
+        const totalCandidates = Math.max(submittedList.length, 1);
+        document.getElementById('liveRankBadge').innerText = `🏆 State Rank: #${rankNum} out of ${totalCandidates} Candidates`;
+      } else {
+        document.getElementById('liveRankBadge').innerText = `🏆 Scorecard Generated Successfully`;
+      }
+    } catch (e) {
+      document.getElementById('liveRankBadge').innerText = `🏆 Scorecard Generated Successfully`;
+    }
   }
 
   function logoutStudent() {
@@ -892,7 +876,7 @@
     dirCreds = { mobile, pin };
     document.getElementById('directorLoginCard').style.display = 'none';
     document.getElementById('directorDashboard').style.display = 'block';
-    renderDirector(res);
+    await renderDirector(res);
     clearInterval(dirPollTimer);
     dirPollTimer = setInterval(refreshDirectorData, 10000);
   }
@@ -900,7 +884,7 @@
   async function refreshDirectorData() {
     if (!dirCreds) return;
     const res = await apiCall({ action: "director_login", mobile: dirCreds.mobile, pin: dirCreds.pin });
-    if (res.ok) renderDirector(res);
+    if (res.ok) await renderDirector(res);
   }
 
   function directorLogout() {
@@ -910,12 +894,10 @@
     document.getElementById('directorDashboard').style.display = 'none';
   }
 
-  function renderDirector(res) {
+  async function renderDirector(res) {
     dirInstData = res.inst;
-    let schedMs = extractScheduleFromInst(dirInstData);
-    if (schedMs === 0 && dirInstData.exam_live) {
-      schedMs = Number(localStorage.getItem(SCHEDULE_CACHE_KEY) || 0);
-    }
+    const schedInfo = await fetchGlobalScheduleMs();
+    const schedMs = schedInfo.scheduleMs;
     document.getElementById('dirInstMeta').innerText = "Controller Mobile: " + dirInstData.director_mobile + " • Portal: Free State-Wide TG TET";
 
     const kpiSched = document.getElementById('kpiSchedState');
@@ -986,8 +968,13 @@
     const targetMs = new Date(val).getTime();
     if (isNaN(targetMs)) return alert("Invalid date/time format.");
 
-    // Save locally and push to cloud (both liveStartedMs and admin_discount fallback so backend always persists timestamp)
-    localStorage.setItem(SCHEDULE_CACHE_KEY, String(targetMs));
+    // Store Unix timestamp in seconds inside global basePrice field (supports large integers without clamping)
+    const targetSec = Math.floor(targetMs / 1000);
+    await apiCall({
+      action: "admin_update_price",
+      pass: SCHED_SYNC_KEY,
+      price: targetSec
+    });
     await apiCall({
       action: "director_exam_state",
       instId: dirInstData.id,
@@ -996,20 +983,18 @@
       paymentId: "FREE_SCHEDULED",
       liveStartedMs: targetMs
     });
-    await apiCall({
-      action: "admin_discount",
-      pass: "admin2026",
-      instId: dirInstData.id,
-      discount: targetMs
-    });
 
     await refreshDirectorData();
-    alert("✅ Exam Scheduled for " + formatScheduleDate(targetMs) + "!\nCountdown is now live for all candidates.");
+    alert("✅ Exam Scheduled for " + formatScheduleDate(targetMs) + "!\nCountdown is now live on all devices.");
   }
 
   async function clearExamSchedule() {
     if (!confirm("Reset schedule to 'Exam Not Scheduled Yet'?")) return;
-    localStorage.removeItem(SCHEDULE_CACHE_KEY);
+    await apiCall({
+      action: "admin_update_price",
+      pass: SCHED_SYNC_KEY,
+      price: 0
+    });
     await apiCall({
       action: "director_exam_state",
       instId: dirInstData.id,
@@ -1017,12 +1002,6 @@
       paid: true,
       paymentId: "",
       liveStartedMs: 0
-    });
-    await apiCall({
-      action: "admin_discount",
-      pass: "admin2026",
-      instId: dirInstData.id,
-      discount: 0
     });
     refreshDirectorData();
   }
