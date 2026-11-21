@@ -472,10 +472,12 @@
 
   const API_URL = "https://apex.smartstudyhub.workers.dev";
   const SESSION_COOKIE_KEY = "TG_TET_P1_FREE_HT_SESSION";
+  const SCHEDULE_CACHE_KEY = "TG_TET_P1_SCHEDULE_MS";
   const PAPER_TAG = "_TETP1S2";
   const HT_PREFIX = "TET25-";
   const EXAM_DURATION_MINS = 150;
 
+  // Director credentials
   const DIRECTOR_MOBILE = "8074645018";
   const DIRECTOR_PIN = "1234";
 
@@ -529,17 +531,43 @@
     document.getElementById('htLoginBox').style.display = (mode === 'login') ? 'block' : 'none';
   }
 
+  // Extract schedule timestamp reliably from either liveStartedMs or live_started_ms or discount fallback
+  function extractScheduleFromInst(inst) {
+    if (!inst) return 0;
+    const ms1 = Number(inst.liveStartedMs || 0);
+    const ms2 = Number(inst.live_started_ms || 0);
+    const ms3 = Number(inst.discount || 0); // Fallback if backend stores custom timestamp in discount
+    if (ms1 > 1700000000000) return ms1;
+    if (ms2 > 1700000000000) return ms2;
+    if (ms3 > 1700000000000) return ms3;
+    return 0;
+  }
+
   async function fetchGlobalScheduleMs() {
     try {
       const res = await apiCall({ action: "director_login", mobile: DIRECTOR_MOBILE, pin: DIRECTOR_PIN });
       if (res.ok && res.inst) {
+        let sched = extractScheduleFromInst(res.inst);
+        if (sched > 0) {
+          localStorage.setItem(SCHEDULE_CACHE_KEY, String(sched));
+        } else {
+          // Check if explicitly cleared (exam_live === 0 / false)
+          if (!res.inst.exam_live) {
+            localStorage.removeItem(SCHEDULE_CACHE_KEY);
+          } else {
+            sched = Number(localStorage.getItem(SCHEDULE_CACHE_KEY) || 0);
+          }
+        }
         return {
-          scheduleMs: Number(res.inst.live_started_ms || 0),
+          scheduleMs: sched,
           students: (res.students || []).filter(s => String(s.roll).endsWith(PAPER_TAG))
         };
       }
     } catch (e) {}
-    return { scheduleMs: 0, students: [] };
+    return {
+      scheduleMs: Number(localStorage.getItem(SCHEDULE_CACHE_KEY) || 0),
+      students: []
+    };
   }
 
   // ================= FREE STUDENT REGISTRATION & HALL TICKET LOGIN =================
@@ -594,7 +622,7 @@
     await bootStudentPortal(res);
   }
 
-  let stuSession = null, currentIdx = 0, answersMap = {}, examEndTimeMs = 0, timerInterval = null, lobbyInterval = null;
+  let stuSession = null, currentIdx = 0, answersMap = {}, examEndTimeMs = 0, timerInterval = null, lobbyInterval = null, schedulePollTimer = null, lastActiveScheduleMs = -1;
 
   async function bootStudentPortal(res) {
     const stu = res.student;
@@ -613,6 +641,7 @@
     document.getElementById('studentLoginCard').style.display = 'none';
 
     if (stu.status === "SUBMITTED") {
+      clearInterval(schedulePollTimer);
       submitExam(true);
       return;
     }
@@ -630,13 +659,34 @@
     } else if (Date.now() < scheduleMs) {
       showHallTicketLobby(scheduleMs);
     } else {
+      clearInterval(schedulePollTimer);
       const calculatedEnd = scheduleMs + (EXAM_DURATION_MINS * 60 * 1000);
       examEndTimeMs = (Date.now() < calculatedEnd) ? calculatedEnd : (Date.now() + EXAM_DURATION_MINS * 60 * 1000);
       launchActualExamScreen();
+      return;
     }
+
+    // Auto-poll every 10 seconds while in lobby so countdown starts automatically when Director schedules
+    clearInterval(schedulePollTimer);
+    schedulePollTimer = setInterval(async () => {
+      const latest = await fetchGlobalScheduleMs();
+      if (latest.scheduleMs !== lastActiveScheduleMs) {
+        document.getElementById('htDisplaySchedule').innerText = formatScheduleDate(latest.scheduleMs);
+        if (latest.scheduleMs > 0 && Date.now() >= latest.scheduleMs) {
+          clearInterval(schedulePollTimer);
+          clearInterval(lobbyInterval);
+          const calcEnd = latest.scheduleMs + (EXAM_DURATION_MINS * 60 * 1000);
+          examEndTimeMs = (Date.now() < calcEnd) ? calcEnd : (Date.now() + EXAM_DURATION_MINS * 60 * 1000);
+          launchActualExamScreen();
+        } else {
+          showHallTicketLobby(latest.scheduleMs);
+        }
+      }
+    }, 10000);
   }
 
   function showHallTicketLobby(scheduleMs) {
+    lastActiveScheduleMs = scheduleMs;
     document.getElementById('waitingLobbyScreen').style.display = 'block';
     clearInterval(lobbyInterval);
 
@@ -655,8 +705,10 @@
       const remSec = Math.ceil((scheduleMs - Date.now()) / 1000);
       if (remSec <= 0) {
         clearInterval(lobbyInterval);
+        clearInterval(schedulePollTimer);
         document.getElementById('waitingLobbyScreen').style.display = 'none';
-        examEndTimeMs = Date.now() + (EXAM_DURATION_MINS * 60 * 1000);
+        const calcEnd = scheduleMs + (EXAM_DURATION_MINS * 60 * 1000);
+        examEndTimeMs = (Date.now() < calcEnd) ? calcEnd : (Date.now() + EXAM_DURATION_MINS * 60 * 1000);
         launchActualExamScreen();
         return;
       }
@@ -777,6 +829,7 @@
   async function submitExam(alreadySubmitted) {
     clearInterval(timerInterval);
     clearInterval(lobbyInterval);
+    clearInterval(schedulePollTimer);
     document.getElementById('waitingLobbyScreen').style.display = 'none';
     document.getElementById('examScreen').style.display = 'none';
     document.getElementById('resultScreen').style.display = 'block';
@@ -822,6 +875,8 @@
 
   function logoutStudent() {
     if (!confirm("Are you sure you want to logout?")) return;
+    clearInterval(schedulePollTimer);
+    clearInterval(lobbyInterval);
     localStorage.removeItem(SESSION_COOKIE_KEY);
     location.reload();
   }
@@ -857,7 +912,10 @@
 
   function renderDirector(res) {
     dirInstData = res.inst;
-    const schedMs = Number(dirInstData.live_started_ms || 0);
+    let schedMs = extractScheduleFromInst(dirInstData);
+    if (schedMs === 0 && dirInstData.exam_live) {
+      schedMs = Number(localStorage.getItem(SCHEDULE_CACHE_KEY) || 0);
+    }
     document.getElementById('dirInstMeta').innerText = "Controller Mobile: " + dirInstData.director_mobile + " • Portal: Free State-Wide TG TET";
 
     const kpiSched = document.getElementById('kpiSchedState');
@@ -928,6 +986,8 @@
     const targetMs = new Date(val).getTime();
     if (isNaN(targetMs)) return alert("Invalid date/time format.");
 
+    // Save locally and push to cloud (both liveStartedMs and admin_discount fallback so backend always persists timestamp)
+    localStorage.setItem(SCHEDULE_CACHE_KEY, String(targetMs));
     await apiCall({
       action: "director_exam_state",
       instId: dirInstData.id,
@@ -936,12 +996,20 @@
       paymentId: "FREE_SCHEDULED",
       liveStartedMs: targetMs
     });
-    refreshDirectorData();
+    await apiCall({
+      action: "admin_discount",
+      pass: "admin2026",
+      instId: dirInstData.id,
+      discount: targetMs
+    });
+
+    await refreshDirectorData();
     alert("✅ Exam Scheduled for " + formatScheduleDate(targetMs) + "!\nCountdown is now live for all candidates.");
   }
 
   async function clearExamSchedule() {
     if (!confirm("Reset schedule to 'Exam Not Scheduled Yet'?")) return;
+    localStorage.removeItem(SCHEDULE_CACHE_KEY);
     await apiCall({
       action: "director_exam_state",
       instId: dirInstData.id,
@@ -949,6 +1017,12 @@
       paid: true,
       paymentId: "",
       liveStartedMs: 0
+    });
+    await apiCall({
+      action: "admin_discount",
+      pass: "admin2026",
+      instId: dirInstData.id,
+      discount: 0
     });
     refreshDirectorData();
   }
